@@ -5,3 +5,16 @@ block header
     nav.blue-grey.darken-4
       div.nav-wrapper
         a.brand-logo.center(href="/") THUMP
+        ul.right
+          li
+            a.btn.modal-trigger(data-target="create-modal") Create a new playlist
+            
+  div.modal#create-modal
+    div.modal-content
+      form(name="create", action="playlist/create", method="post")
+        div.container
+          div.row.valign-wrapper
+            div.input-field.col.s10
+              input(placeholder="CREATE A PLAYLIST" id="name" class="validate")
+            div.col.s2
+              button.btn(type="submit" name="actions") Create
