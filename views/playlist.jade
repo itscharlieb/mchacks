@@ -29,8 +29,8 @@ mixin song(song, index)
           p#vote_val= song.votes
         div.col.s2
           div.row
-            button(id="like" data-playlist_id=playlist._id, data-song_id=song._id)
+            button.vote(id="like" data-playlist_id=playlist._id, data-song_id=song._id)
               i.material-icons thumb_up
           div.row
-            button(id="dislike" data-playlist_id=playlist._id, data-song_id=song._id)
+            button.vote(id="dislike" data-playlist_id=playlist._id, data-song_id=song._id)
               i.material-icons thumb_down
