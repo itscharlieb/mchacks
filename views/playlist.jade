@@ -4,7 +4,7 @@ block content
   div.row
     div.col.s4
       div.card
-        div.card-content
+        div.card-content#searchBox
           div.input-field
             input(placeholder="Search for songs" id="search" type="search")
             i.material-icons.right search
@@ -19,15 +19,15 @@ block content
 mixin song(song, index)
   - var song = song.items
   -if (index != 0)
-    li.collection-item.valign-wrapper
+    li.collection-item.valign-wrapper#playlistItems
       div.col.s2
         - var thumbnailUrl = "http://img.youtube.com/vi/" + song.id + "/default.jpg"
-        img.responsive-img(src=thumbnailUrl)
+        img#thumbnail.responsive-img(src=thumbnailUrl)
       div.col.s4
-        p= song.name
-      div.col.s4
+        p#songName= song.name
+      div.col.s4.removeSearch
         p#vote_val= song.votes
-      div.col.s2
+      div.col.s2.removeSearch
         div.row
           button.btn-floating.green.darken-4.vote(id="like" data-playlist_id=playlist._id, data-song_id=song._id)
             i.material-icons thumb_up

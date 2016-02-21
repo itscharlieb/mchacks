@@ -99,10 +99,25 @@ $( document ).ready(function() {
       queryString += "&q=" + query + "&key=" + api_key;
       console.log(queryString);
       $.get( queryString, function( response ) {
+        // TODO should probably do this as all strings like the newContainer
+        var newContainer = $('<div class="collection z-depth-1">')
+        var templateElm = $('#playlistItems').clone();
+        templateElm.find('.removeSearch').remove();
+        var response = response.items;
+        
+
         $.each(response, function(i, item) {
+          var newElm = templateElm.clone();
+          newElm.data('vidId', item.id.videoId);
           console.log(item);
-          $('#searchResult');
+          newElm.find('#thumbnail').attr('src', item.snippet.thumbnails.default.url);
+          newElm.find('#songName').text(item.snippet.title);
+          newContainer.append(newElm);
+          // What to append to
         });
+
+        newContainer.append("</div>");
+        $('#searchBox').append(newContainer);
       });
 
       return false;

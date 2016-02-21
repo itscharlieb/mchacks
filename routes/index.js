@@ -18,6 +18,7 @@ var conn = mongoose.connection
 var Schema = mongoose.Schema;
 
 
+// Consider putting in a "last_played"
 var PlaylistSchema = new Schema({
     name: String,
     // creator: mongoose.Schema.Types.ObjectId,     // Not needed for now
