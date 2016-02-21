@@ -5,17 +5,17 @@ block content
     div.col.s4
       ul.collection.with-header.white
         li.collection-header 
-          h5.center-align Playlist songs
+          div.input-field
+            input(id="search" type="search" placeholder="Find New Songs")
+            label(for="search")
+              i.material-icons search
+            i.material-icons close
+          
         each song, index in playlist.items
           +song(song, index)
     div.col.s8
       div.center-align
         div(id="player", data-vid_id=playlist.items[0].id)
-        div.input-field
-          input(id="search" type="search")
-          label(for="search")
-            i.material-icons search
-          i.material-icons close
 
                     
 mixin song(song, index)

@@ -47,7 +47,7 @@ Playlist.find().count(function(err, count){
         artist: 'THUMP',
         votes: 5,
       },{
-        id: 'SKLcIxPHWA',
+        id: '_SKLcIxPHWA',
         url: 'https://www.youtube.com/watch?v=_SKLcIxPHWA',
         name: 'Palastic - Far Away (feat. Josh Roa)',
         artist: 'MrSuicideSheep',
@@ -118,6 +118,20 @@ router.post('/playlist/song/vote', function(req, res){
       // Check if it worked, if it did then send the incrementation back...
       // If it didn't (like if the user already voted) send back a 0
       res.status(200).send(JSON.stringify(req.body.inc));
+    }
+  });
+});
+
+
+router.post('/playlist/next', function(req, res){
+  Playlist.findOne(function(err, response){
+    if (err){
+      console.log(err);
+      res.status(500).send(err);
+    }
+    else{
+      //TODO temporary argument id, fix query
+      res.status(200).send(response.items[1].id);
     }
   });
 });
