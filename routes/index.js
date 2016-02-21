@@ -72,7 +72,17 @@ Playlist.find().count(function(err, count){
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Index' });
+  // Exclude the songs cause they are unnecessary on main page
+  //    They will only slow down the load times
+  Playlist.find({}, {items: 0}, function(err,playlists){
+    if (err){
+      console.log(err);
+      res.status(500).send(err);
+    }
+    else{
+      res.render('index', { title: 'Index', playlists: playlists});
+    }
+  });
 });
 
 module.exports = router;
