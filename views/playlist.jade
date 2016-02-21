@@ -8,17 +8,17 @@ block content
           div.input-field
             input(placeholder="Search for songs" id="search" type="search")
             i.material-icons.right search
-    - if (typeof(playlist) !== 'undefined'){
-      div.scrollable
-        ul.collection.z-depth-1
-          each song, index in playlist
-            +song(song, index)
-    -}
+      - if (typeof(playlist) !== 'undefined'){
+        div.scrollable
+          ul.collection.z-depth-1
+            each song, index in playlist
+              +song(song, index)
+      -}
     div.col.s8
       div.center-align
-      - if (typeof(playlist) !== 'undefined'){
-        div(id="player", data-vid_id=playlist[0].items.id)
-      -}
+        - if (typeof(playlist) !== 'undefined'){
+          div(id="player", data-vid_id=playlist[0].items.id)
+        -}
 
                     
 mixin song(song, index)
