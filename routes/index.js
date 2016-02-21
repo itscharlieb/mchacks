@@ -151,6 +151,27 @@ router.post('/playlist/next', function(req, res){
   });
 });
 
+
+router.post('/playlist/add', function(req, res){
+  Playlist.findByIdAndUpdate(mongoose.Types.ObjectId(playlist_id),
+                              {"$addToSet": {'items':
+                                              {'id': req.body.songId,
+                                               'name': req.body.songName,
+                                               'votes': 0}
+                                            }}, function(err,response){
+
+    if (err){
+      console.log(err);
+      res.status(500).send(err);
+    }
+    else{
+      // Don't really need to pass anything... would be cooler to do this
+      // without reloading the page though..
+      res.status(200).send(playlist_id);
+    }
+  });
+});
+
 module.exports = function(io){
   io.on('connection', function(socket) {
     console.log('socket connection');
