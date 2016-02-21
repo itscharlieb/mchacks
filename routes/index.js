@@ -105,14 +105,18 @@ router.post('/playlist/song/vote', function(req, res){
   var playlist_id = req.body.playlist_id;
   var song_id = req.body.song_id;
   // Playlist.aggregate([{ $unwind : "$items" }, { $match : {_id: song_id}}]).exec(function(err, response){
-  Playlist.findOneAndUpdate({"items._id": song_id}, {"$inc": {"items.$.votes":1}}, function(err, response){
+  Playlist.findOneAndUpdate({"items._id": song_id}, {"$inc": {"items.$.votes":req.body.inc}}, function(err, response){
     if (err){
       console.log(err);
       res.status(500).send(err);
     }
     else{
       console.log(JSON.stringify(response));
-      res.status(200).send(response);
+
+      // TODO check if user has already voted on this 
+      // Check if it worked, if it did then send the incrementation back...
+      // If it didn't (like if the user already voted) send back a 0
+      res.status(200).send(JSON.stringify(req.body.inc));
     }
   });
 });
