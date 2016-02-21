@@ -1,16 +1,20 @@
 extends layout
 
 block content
-  div.std-margins
-    div.row
-      div.col.s4
-        div.row
-          ul
-            each song, index in playlist.items
-              +song(song, index)
-      div.col.s8
-        div.center(id="player", data-vid_id=playlist.items[0].id)
-    
+  div.row
+    div.col.s4
+      ul
+        each song, index in playlist.items
+          +song(song, index)
+    div.col.s8
+      div.center-align
+        div(id="player", data-vid_id=playlist.items[0].id)
+        div.input-field
+          input(id="search" type="search" required)
+          label(for="search")
+            i.material-icons search
+          i.material-icons close
+
                     
 mixin song(song, index)
   -if (index != 0)
@@ -19,9 +23,10 @@ mixin song(song, index)
         div.col.s2
           - var thumbnailUrl = "http://img.youtube.com/vi/" + song.id + "/default.jpg"
           img.responsive-img(src=thumbnailUrl)
-        div.col.s8
-          span.black-text
-            h5= song.name
+        div.col.s4
+          p= song.name
+        div.col.s4
+          p= song.votes
         div.col.s2
           div.row
             button(id="like" data-playlist_id=playlist._id, data-song_id=song._id)
