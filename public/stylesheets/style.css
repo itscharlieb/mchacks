@@ -1,5 +1,4 @@
 body {
-  padding: 50px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
@@ -7,9 +6,13 @@ a {
   color: #00B7FF;
 }
 
-nav{
+/*nav {
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
   width: 100%;
-}
+}*/
 
 .std-margins {
   position: absolute;
