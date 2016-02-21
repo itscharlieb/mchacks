@@ -59,10 +59,10 @@ Playlist.find().count(function(err, count){
         artist: 'Trap City',
         votes: 5,
       },{
-        id: 'GZSxOEqgm0c',
-        url: 'https://www.youtube.com/watch?v=GZSsOEqgm0c',
-        name: 'Major Lazer - Be Together feat. Wild Belle (Official Music Video)',
-        artist: 'majorlazer',
+        id: 'n09oiii8hO4',
+        url: 'https://www.youtube.com/watch?v=n09oiii8hO4',
+        name: 'Major Lazer - Be Together (feat. Wild Belle) (Vanic Remix)',
+        artist: 'Trap City',
         votes: 3,
       }]
     }).save(function(err, saved){
@@ -81,7 +81,6 @@ router.get('/', function(req, res, next) {
       res.status(500).send(err);
     }
     else{
-      console.log(JSON.stringify(playlists));
       res.render('index', { title: 'Index', playlists: playlists });
     }
   });
@@ -101,7 +100,10 @@ router.get('/playlist/:id', function(req, res, next) {
       res.status(500).send(err);
     }
     else{
-      console.log(playlist);
+      var song_id = playlist[0].items._id;
+      Playlist.findOneAndUpdate({"items._id": song_id}, {"$set": {"items.$.votes":0}}, function(err, response){
+        if (err) console.log(err);
+      });
       res.render('playlist', { playlist:playlist });
     }
   });
@@ -139,6 +141,10 @@ router.post('/playlist/next', function(req, res){
       res.status(500).send(err);
     }
     else{
+      var song_id = response[0].items._id;
+      Playlist.findOneAndUpdate({"items._id": song_id}, {"$set": {"items.$.votes":0}}, function(err, response){
+        if (err) console.log(err);
+      });
       // TODO need to set the current playing votes to 0
       res.status(200).send(response[0].items.id);
     }
