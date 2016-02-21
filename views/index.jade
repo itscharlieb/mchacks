@@ -2,6 +2,12 @@ extends layout
 
 block content
   div.container.std-margins
+    div.row
+      form(name="create", action="playlist/create", method="post")
+        div.input-field.col.s8
+          input(placeholder="Enter a playlist name" id="name" class="validate")
+        button.btn.col.s4(type="submit", name="action") Create
+          i.material-icons.right send
     ul
       each val in playlists
         li 
