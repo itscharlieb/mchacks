@@ -109,11 +109,29 @@ $( document ).ready(function() {
         $.each(response, function(i, item) {
           var newElm = templateElm.clone();
           newElm.data('vidId', item.id.videoId);
-          console.log(item);
           newElm.find('#thumbnail').attr('src', item.snippet.thumbnails.default.url);
           newElm.find('#songName').text(item.snippet.title);
           newElm.click(function(){
-            
+            var data = {};
+            data.songId = $(this).data('vidId');
+            data.songName = $(this).find('#songName').text();
+            $.ajax({
+              type: 'POST',
+              contentType: 'application/json',
+              url: '/playlist/add',
+              data: JSON.stringify(data),
+              async: true,
+              statusCode: {
+                200: function(playlist_id) {
+                  console.log(playlist_id);
+                  window.location.replace("/playlist/" + playlist_id);
+                },
+                400: function(data) {
+                  console.log(data);
+                  alert("Didn't work");
+                }
+              }
+            });
             $(this).parent().remove();
           });
           newContainer.append(newElm);
