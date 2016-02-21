@@ -1,7 +1,7 @@
 //TODO I really don't like how this loads... its all laggy and jumpy
 // probably can be fixed with better html stylings
 // 2. This code loads the IFrame Player API code asynchronously.
-
+var socket = io();
 var tag = document.createElement('script');
 
 tag.src = "https://www.youtube.com/iframe_api";
@@ -33,42 +33,59 @@ function onPlayerReady(event) {
 //    the player should play for six seconds and then stop.
 var done = false;
 function onPlayerStateChange(event) {
+  if(event.data == 0){
+    console.log("socket sending next song request");
+    socket.emit('next_song');
+  }
   //if (event.data == YT.PlayerState.PLAYING && !done) {
   //  setTimeout(stopVideo, 6000);
   //  done = true;
   //}
-  if (event.data == 0){
-    $.ajax({
-      type: 'POST',
-      contentType: 'application/json',
-      url: '/playlist/next',
-      async: true,
-      statusCode: {
-        200: function(nextSong) {
-          console.log(nextSong);
-          player.loadVideoById(nextSong);
-        },
-        400: function(data) {
-          console.log(data);
-          alert("Didn't work");
-        }
-      }
-
-    });
-  }
+  // if (event.data == 0){
+  //   $.ajax({
+  //     type: 'POST',
+  //     contentType: 'application/json',
+  //     url: '/playlist/next',
+  //     async: true,
+  //     statusCode: {
+  //       200: function(nextSong) {
+  //         console.log(nextSong);
+  //         player.loadVideoById(nextSong);
+  //       },
+  //       400: function(data) {
+  //         console.log(data);
+  //         alert("Didn't work");
+  //       }
+  //     }
+  //
+  //   });
+  // }
 }
 function stopVideo() {
   player.stopVideo();
 }
 
 $( document ).ready(function() {
-  var socket = io();
+  // var vote_obj = $(this).parent().parent().parent().find("#vote_val")
+
+  //like message
   socket.on("like", function(song_id){
-    console.log("socket received like");
+    console.log("socket received like for [" + song_id + "]");
+    var vote_obj = $("#" + song_id);
+    vote_obj.text(parseInt(vote_obj.text()) + 1);
   });
 
+  //dislike message
   socket.on("dislike", function(song_id){
-    console.log("socket received dislike");
+    console.log("socket received dislike for [" + song_id + "]");
+    var vote_obj = $("#" + song_id);
+    vote_obj.text(parseInt(vote_obj.text()) - 1);
+  })
+
+  //next song message
+  socket.on("next_song", function(song_id) {
+    console.log("socket received load video if for[" + song_id + "]");
+    player.loadVideoById(song_id);
   })
 
   $('.vote').on('click', function(){
