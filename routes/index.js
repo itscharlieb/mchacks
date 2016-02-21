@@ -92,6 +92,18 @@ var playlist_id = null;
 router.get('/playlist/:id', function(req, res, next) {
   playlist_id = req.params.id;
 
+  router.io.on('connection', function(socket) {
+    socket.join(playlist_id);
+    console.log('socket connection');
+    socket.on('like', function(data){
+      console.log("like emitted");
+      router.io.sockets.in(playlist_id).emit('like', data);
+    });
+    socket.on('dislike', function(dat){
+      console.log("dislike emitted");
+      router.io.sockets.in(playlist_id).emit('dislike', data);
+    });
+  });
   //add user to socket room
   // router.io.join('test');
 
@@ -197,14 +209,7 @@ router.post('/playlist/add', function(req, res){
 
 module.exports = function(io){
   router.io = io;
-  io.on('connection', function(socket) {
-    console.log('socket connection');
-  });
-  io.on('like', function(socket){
-    io.emit('like', 'everyone');
-  });
-  io.on('dislike', function(socket){
-    io.emit('dislike', 'everyone');
-  });
+
+
   return router;
 }
