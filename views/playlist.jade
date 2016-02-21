@@ -8,9 +8,10 @@ block content
           div.input-field
             input(placeholder="Search for songs" id="search" type="search")
             i.material-icons.right search
-      div.collection.z-depth-1
-        each song, index in playlist
-          +song(song, index)
+      div.something
+        ul.collection.z-depth-1
+          each song, index in playlist
+            +song(song, index)
     div.col.s8
       div.center-align
         div(id="player", data-vid_id=playlist[0].items.id)
@@ -19,18 +20,15 @@ block content
 mixin song(song, index)
   - var song = song.items
   -if (index != 0)
-    li.collection-item.valign-wrapper
-      div.col.s2
-        - var thumbnailUrl = "http://img.youtube.com/vi/" + song.id + "/default.jpg"
-        img.responsive-img(src=thumbnailUrl)
-      div.col.s4
-        p= song.name
-      div.col.s4
-        p#vote_val= song.votes
-      div.col.s2
-        div.row
+    li.collection-item
+      div.row.valign-wrapper
+        div.col.s6
+          p= song.name
+        div.col.s2
+          p#vote_val= song.votes
+        div.col.s2
           button.btn-floating.green.darken-4.vote(id="like" data-playlist_id=playlist._id, data-song_id=song._id)
             i.material-icons thumb_up
-        div.row
+        div.col.s2
           button.btn-floating.red.darken-4.vote(id="dislike" data-playlist_id=playlist._id, data-song_id=song._id)
             i.material-icons thumb_down
