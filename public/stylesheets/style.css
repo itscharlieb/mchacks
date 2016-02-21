@@ -9,8 +9,10 @@ nav {
   letter-spacing: 1px;
 }
 
-#player {
-  vertical-align: middle;
+#player-container {
+  position: absolute;
+  top: 50%;
+  transform: translate(15%,-50%);
 }
 
 .scrollable {
