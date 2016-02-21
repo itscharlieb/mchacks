@@ -3,7 +3,9 @@ extends nav_layout
 block content
   div.row
     div.col.s4
-      ul
+      ul.collection.with-header.white
+        li.collection-header 
+          h5.center-align Playlist songs
         each song, index in playlist.items
           +song(song, index)
     div.col.s8
@@ -18,19 +20,19 @@ block content
                     
 mixin song(song, index)
   -if (index != 0)
-    div.card-panel.small.blue-grey
-      div.row.valign-wrapper
-        div.col.s2
-          - var thumbnailUrl = "http://img.youtube.com/vi/" + song.id + "/default.jpg"
-          img.responsive-img(src=thumbnailUrl)
-        div.col.s4
-          p= song.name
-        div.col.s4
-          p#vote_val= song.votes
-        div.col.s2
-          div.row
-            button.vote(id="like" data-playlist_id=playlist._id, data-song_id=song._id)
-              i.material-icons thumb_up
-          div.row
-            button.vote(id="dislike" data-playlist_id=playlist._id, data-song_id=song._id)
-              i.material-icons thumb_down
+    //- div.card-panel.small
+    div.row
+      div
+        - var thumbnailUrl = "http://img.youtube.com/vi/" + song.id + "/default.jpg"
+        img.responsive-img(src=thumbnailUrl)
+      //- div.col.s4
+      //-   p= song.name
+      //- div.col.s4
+      //-   p#vote_val= song.votes
+      //- div.col.s2
+      //-   div.row
+      //-     button.btn-floating.green.darken-4.vote(id="like" data-playlist_id=playlist._id, data-song_id=song._id)
+      //-       i.material-icons thumb_up
+      //-   div.row
+      //-     button.btn-floating.red.darken-4.vote(id="dislike" data-playlist_id=playlist._id, data-song_id=song._id)
+      //-       i.material-icons thumb_down
