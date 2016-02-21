@@ -80,7 +80,22 @@ router.get('/', function(req, res, next) {
       res.status(500).send(err);
     }
     else{
-      res.render('index', { title: 'Index', playlists: playlists});
+      res.render('index', { title: 'Index', playlists: playlists });
+    }
+  });
+});
+
+
+router.get('/playlist/:id', function(req, res, next) {
+  var playlistId = req.params.playlistId;
+
+  Playlists.findById(playlistId, function(err,playlist){
+    if (err){
+      console.log(err);
+      res.status(500).send(err);
+    }
+    else{
+      res.render('playlist', { playlist:playlist });
     }
   });
 });
