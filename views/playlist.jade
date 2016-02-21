@@ -8,3 +8,8 @@ block content
 				iframe(width="853" height="480" src="//www.youtube.com/embed/Q8TXgCzxEnw")
 				div#player
 		div.row
+			ul
+				each song in playlist.items
+					li= song.name
+					button(id="like")
+						i.material-icons.right
