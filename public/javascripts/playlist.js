@@ -66,7 +66,10 @@ function stopVideo() {
 }
 
 $( document ).ready(function() {
-  // var vote_obj = $(this).parent().parent().parent().find("#vote_val")
+  socket.on("init", function(song_id){
+    console.log("socket received init for [" + song_id + "]");
+    player.loadVideoById(song_id);
+  })
 
   //like message
   socket.on("like", function(song_id){
