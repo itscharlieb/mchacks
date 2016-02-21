@@ -11,3 +11,5 @@ block content
           li= song.name
             button(id="like", data-playlist_id=playlist._id, data-song_id=song._id)
             i.material-icons.right
+          - var thumbnailUrl = "http://img.youtube.com/vi/" + song.id + "/default.jpg"
+          img(src=thumbnailUrl)
