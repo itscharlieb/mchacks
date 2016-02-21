@@ -104,8 +104,10 @@ $( document ).ready(function() {
         // TODO should probably do this as all strings like the newContainer
         // Best to make this scrollable instead of the entire card
         var newContainer = $('<div class="collection z-depth-1">')
-        var templateElm = $('#playlistItems').clone();
-        templateElm.find('.removeSearch').remove();
+        var templateElm = $('<li class="collection-item valign-wrapper">'
+          + '<div class="col s4"> <img id="thumbnail" class="responsive-img"></div>'
+          + '<div class="col s4"> <p id="songName"> </p> </div>'
+          + '</li>');
         var response = response.items;
 
 

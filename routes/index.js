@@ -123,6 +123,7 @@ router.post('/playlist/create', function(req, res){
     }
     else{
       console.log(JSON.stringify(response));
+      playlist_id = response._id;
       res.render('playlist', { });
     }
   });
