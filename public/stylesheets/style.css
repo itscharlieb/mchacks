@@ -12,3 +12,7 @@ nav {
 #player {
   vertical-align: middle;
 }
+
+.scrollable {
+  overflow-y: scroll;
+}
