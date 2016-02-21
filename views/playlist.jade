@@ -1,0 +1,7 @@
+extends layout
+
+block content
+	div.container
+		ul
+			each song in playlist
+				li= song.json()
