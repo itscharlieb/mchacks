@@ -2,13 +2,20 @@ extends nav_layout
 
 block content
   div.container
-    form(name="create", action="playlist/create", method="post")
-    form.col.s12
-      div.row.valign-wrapper
-        div.input-field.col.s10
-          input(placeholder="CREATE A PLAYLIST" id="name" class="validate")
-        div.col.s2
-          button.btn(type="submit" name="actions") Create
+    div.row
+      //- ul
+      //-   li
+      //-     div.input-field
+      //-       input(id="search" type="search" placeholder="Create new playlist")
+      //-       label(for="create")
+      //-         //- i.material-icons playlist_add
+      //-       i.material-icons close
+      form(name="create", action="playlist/create", method="post")
+        div.row.valign-wrapper
+          div.input-field.col.s10
+            input(placeholder="CREATE A PLAYLIST" id="name" class="validate")
+          div.col.s2
+            button.btn(type="submit" name="actions") Create
     div.row
       ul.collection
         each playlist in playlists

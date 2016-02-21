@@ -98,15 +98,14 @@ $( document ).ready(function() {
       var queryString = "https://www.googleapis.com/youtube/v3/search?part=id%2Csnippet"
       queryString += "&q=" + query + "&key=" + api_key;
       console.log(queryString);
-      $.get( queryString, function( response ) { 
+      $.get( queryString, function( response ) {
         $.each(response, function(i, item) {
           console.log(item);
           $('#searchResult');
-        });     
+        });
       });
 
-      return false; 
+      return false;
     }
   });
 });
-
