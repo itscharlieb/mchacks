@@ -24,7 +24,7 @@ block content
 mixin song(song, index)
   - var song = song.items
   -if (index != 0)
-    li.collection-item.valign-wrapper#song._id
+    li.collection-item.valign-wrapper('id'=song._id)
       div.col.s2
         - var thumbnailUrl = "http://img.youtube.com/vi/" + song.id + "/default.jpg"
         img#thumbnail.responsive-img(src=thumbnailUrl)
