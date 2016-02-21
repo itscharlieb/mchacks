@@ -1,15 +1,13 @@
 extends layout
 
 block content
-	div.container.std-margins
-		//div(id='player')
-		div.row.center
-			div.video-container
-				iframe(width="853" height="480" src="//www.youtube.com/embed/Q8TXgCzxEnw")
-				div#player
-		div.row
-			ul
-				each song in playlist.items
-					li= song.name
-					button(id="like")
-						i.material-icons.right
+  div.container.std-margins
+    div.row.center
+      div(id="player", data-vid_id=playlist.items[0].id)
+    div.row
+    ul
+      each song,index in playlist.items
+        -if (index != 0)
+          li= song.name
+            button(id="like")
+            i.material-icons.right
