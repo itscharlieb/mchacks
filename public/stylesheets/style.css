@@ -1,10 +1,14 @@
 body {
   font-weight: 400;
-  /*background-image: url("https://www.berklee.edu/sites/default/files/Berklee-Headphones_SLIDER_07-06-15.jpg");*/
+  background-image: url("https://www.berklee.edu/sites/default/files/Berklee-Headphones_SLIDER_07-06-15.jpg");
   background-size: cover;
 }
 
 nav {
   font-weight: 200;
   letter-spacing: 1px;
+}
+
+#player {
+  vertical-align: middle;
 }
