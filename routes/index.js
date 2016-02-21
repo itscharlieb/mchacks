@@ -17,6 +17,8 @@ var conn = mongoose.connection
 var Schema = mongoose.Schema;
 
 
+// TODO perhaps change to playlist_name, song_name, and song_id
+//    This is rather confusing
 // Consider putting in a "last_played"
 var PlaylistSchema = new Schema({
     name: String,
@@ -109,6 +111,19 @@ router.get('/playlist/:id', function(req, res, next) {
   });
 });
 
+
+router.post('/playlist/create', function(req, res){
+  new Playlist({'name': req.body.playlist_name}).save(function(err, response){
+    if (err){
+      console.log(err)
+      res.status(500).send(err);
+    }
+    else{
+      console.log(JSON.stringify(response));
+      res.render('playlist', { });
+    }
+  });
+});
 
 
 router.post('/playlist/song/vote', function(req, res){
