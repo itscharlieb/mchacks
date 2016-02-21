@@ -98,24 +98,37 @@ router.get('/playlist/:id', function(req, res, next) {
     // TODO Should probably compress like and dislike into one data object
     socket.on('like', function(data){
       console.log("like emitted");
-      Playlist.findOneAndUpdate({"items._id": song_id}, {"$inc": {"items.$.votes":1}}, function(err, response){
+      console.log(data);
+      Playlist.findOneAndUpdate({"items._id": mongoose.Types.ObjectId(data)}, {"$inc": {"items.$.votes":1}}, function(err, response){
         if (err){
           console.log(err);
           res.status(500).send(err);
         }
         else{
+          // TODO fix this response_data later
+          // Essentially want the db value to maintain persistence
+          var response_data = {};
+          response_data.song_id = data;
+          // For whatever reason it does not respond with the updated version
+          response_data.votes = response.items.votes+1;
           router.io.sockets.in(playlist_id).emit('like', data);
         }
       });
     });
     socket.on('dislike', function(data){
       console.log("dislike emitted");
-      Playlist.findOneAndUpdate({"items._id": song_id}, {"$inc": {"items.$.votes":-1}}, function(err, response){
+      Playlist.findOneAndUpdate({"items._id": data}, {"$inc": {"items.$.votes":-1}}, function(err, response){
         if (err){
           console.log(err);
           res.status(500).send(err);
         }
         else{
+          // TODO fix this response_data later
+          // Essentially want the db value to maintain persistence
+          var response_data = {};
+          response_data.song_id = data;
+          // For whatever reason it does not respond with the updated version
+          response_data.votes = response.items.votes-1;
           router.io.sockets.in(playlist_id).emit('dislike', data);
         }
       });
