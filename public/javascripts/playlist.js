@@ -74,14 +74,15 @@ $( document ).ready(function() {
   //like message
   socket.on("like", function(song_id){
     console.log("socket received like for [" + song_id + "]");
-    var vote_obj = $("#" + song_id);
+    var vote_obj = $("#" + song_id).find('#vote_val');
     vote_obj.text(parseInt(vote_obj.text()) + 1);
   });
 
   //dislike message
   socket.on("dislike", function(song_id){
     console.log("socket received dislike for [" + song_id + "]");
-    var vote_obj = $("#" + song_id);
+    var vote_obj = $("#" + song_id).find('#vote_val');
+    console.log(vote_obj.text());
     vote_obj.text(parseInt(vote_obj.text()) - 1);
   })
 

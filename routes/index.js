@@ -95,13 +95,51 @@ router.get('/playlist/:id', function(req, res, next) {
   router.io.on('connection', function(socket) {
     socket.join(playlist_id);
     console.log('socket connection');
+    // TODO Should probably compress like and dislike into one data object
     socket.on('like', function(data){
       console.log("like emitted");
-      router.io.sockets.in(playlist_id).emit('like', data);
+      Playlist.findOneAndUpdate({"items._id": song_id}, {"$inc": {"items.$.votes":1}}, function(err, response){
+        if (err){
+          console.log(err);
+          res.status(500).send(err);
+        }
+        else{
+          router.io.sockets.in(playlist_id).emit('like', data);
+        }
+      });
     });
-    socket.on('dislike', function(dat){
+    socket.on('dislike', function(data){
       console.log("dislike emitted");
-      router.io.sockets.in(playlist_id).emit('dislike', data);
+      Playlist.findOneAndUpdate({"items._id": song_id}, {"$inc": {"items.$.votes":-1}}, function(err, response){
+        if (err){
+          console.log(err);
+          res.status(500).send(err);
+        }
+        else{
+          router.io.sockets.in(playlist_id).emit('dislike', data);
+        }
+      });
+    });
+    socket.on('next_song', function(){
+      console.log("next_song emitted");
+      console.log(playlist_id);
+      Playlist.aggregate([{'$match': {'_id': mongoose.Types.ObjectId(playlist_id)}},
+                          {'$project': {'items':'$items', '_id':0}},
+                          {'$unwind': '$items'}, {'$sort': {'items.votes': -1}},
+                          {'$limit': 1}]).exec(function(err, response){
+        if (err){
+          console.log(err);
+          res.status(500).send(err);
+        }
+        else{
+          var song_id = response[0].items._id;
+          Playlist.findOneAndUpdate({"items._id": song_id}, {"$set": {"items.$.votes":0}}, function(err, response){
+            if (err) console.log(err);
+          });
+          // TODO need to set the current playing votes to 0
+          router.io.sockets.in(playlist_id).emit('next_song', response[0].items.id);
+        }
+      });
     });
   });
   //add user to socket room
@@ -165,26 +203,6 @@ router.post('/playlist/song/vote', function(req, res){
   });
 });
 
-
-router.post('/playlist/next', function(req, res){
-  Playlist.aggregate([{'$match': {'_id': mongoose.Types.ObjectId(playlist_id)}},
-                      {'$project': {'items':'$items', '_id':0}},
-                      {'$unwind': '$items'}, {'$sort': {'items.votes': -1}},
-                      {'$limit': 1}]).exec(function(err, response){
-    if (err){
-      console.log(err);
-      res.status(500).send(err);
-    }
-    else{
-      var song_id = response[0].items._id;
-      Playlist.findOneAndUpdate({"items._id": song_id}, {"$set": {"items.$.votes":0}}, function(err, response){
-        if (err) console.log(err);
-      });
-      // TODO need to set the current playing votes to 0
-      res.status(200).send(response[0].items.id);
-    }
-  });
-});
 
 
 router.post('/playlist/add', function(req, res){
