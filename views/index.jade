@@ -3,13 +3,17 @@ extends nav_layout
 block content
   div.container.std-margins
     //- form(name="create", action="playlist/create", method="post")
-    div.row
-      div.input-field.col.s8.offset-s2
-        input(placeholder="CREATE A PLAYLIST" id="name" class="validate")
-    div.row
-      div.col.s8.offset-s2
-        a.btn Browse Playlists
-          i.material-icons.right send  
+    form.col.s12
+      div.row.valign-wrapper
+        div.input-field.col.s10
+          input(placeholder="CREATE A PLAYLIST" id="name" class="validate")
+        div.col.s2
+          button.btn(type="submit" name="actions") Create
+      
+    //- div.row
+    //-   div.col.s8.offset-s2
+    //-     a.btn Browse Playlists
+    //-       i.material-icons.right send  
     div.row
       div.col.s8.offset-s2
         ul.collection
