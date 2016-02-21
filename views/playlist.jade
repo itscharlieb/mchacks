@@ -20,19 +20,18 @@ block content
                     
 mixin song(song, index)
   -if (index != 0)
-    //- div.card-panel.small
-    div.row
-      div
+    div.row.valign-wrapper
+      div.col.s2
         - var thumbnailUrl = "http://img.youtube.com/vi/" + song.id + "/default.jpg"
         img.responsive-img(src=thumbnailUrl)
-      //- div.col.s4
-      //-   p= song.name
-      //- div.col.s4
-      //-   p#vote_val= song.votes
-      //- div.col.s2
-      //-   div.row
-      //-     button.btn-floating.green.darken-4.vote(id="like" data-playlist_id=playlist._id, data-song_id=song._id)
-      //-       i.material-icons thumb_up
-      //-   div.row
-      //-     button.btn-floating.red.darken-4.vote(id="dislike" data-playlist_id=playlist._id, data-song_id=song._id)
-      //-       i.material-icons thumb_down
+      div.col.s4
+        p= song.name
+      div.col.s4
+        p#vote_val= song.votes
+      div.col.s2
+        div.row
+          button.btn-floating.green.darken-4.vote(id="like" data-playlist_id=playlist._id, data-song_id=song._id)
+            i.material-icons thumb_up
+        div.row
+          button.btn-floating.red.darken-4.vote(id="dislike" data-playlist_id=playlist._id, data-song_id=song._id)
+            i.material-icons thumb_down
