@@ -46,8 +46,9 @@ $( document ).ready(function() {
       // There might be a better way to store this information
       // Especially the playlist id... seems redundant
       var data = {};
-      data.playlist_id = $(this).data('playlist_id');
-      data.song_id = $(this).data('song_id');
+      // Have to remove the double quotes... most annoying error ever
+      data.playlist_id = $(this).data('playlist_id').replace(/\"/g, "");
+      data.song_id = $(this).data('song_id').replace(/\"/g, "");
       $.ajax({
         type: 'POST',
         contentType: 'application/json',
