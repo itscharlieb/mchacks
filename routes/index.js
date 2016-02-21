@@ -156,23 +156,6 @@ router.post('/playlist/song/vote', function(req, res){
 
 
 router.post('/playlist/add', function(req, res){
-  Playlist.findByIdAndUpdate(mongoose.Types.ObjectId(playlist_id),
-                              {"$addToSet": {'items':
-                                              {'id': req.body.songId,
-                                               'name': req.body.songName,
-                                               'votes': 0}
-                                            }}, function(err,response){
-
-    if (err){
-      console.log(err);
-      res.status(500).send(err);
-    }
-    else{
-      // Don't really need to pass anything... would be cooler to do this
-      // without reloading the page though..
-      res.status(200).send(playlist_id);
-    }
-  });
 });
 
 module.exports = function(io){
@@ -182,7 +165,7 @@ router.io.on('connection', function(socket) {
   socket.join(playlist_id);
   console.log('socket connection');
 
-  // On init logic
+  // TODO On init logic
   // Need a way of getting timestamp logic
 
 
@@ -242,6 +225,28 @@ router.io.on('connection', function(socket) {
         });
         // TODO need to set the current playing votes to 0
         router.io.sockets.in(playlist_id).emit('next_song', response[0].items.id);
+      }
+    });
+  });
+  socket.on('new_song', function(data){
+    // data has fields of name and yid 
+    // This is invoked when a search element is clicked
+    console.log(data);
+   
+    Playlist.findByIdAndUpdate(mongoose.Types.ObjectId(playlist_id),
+                                {"$addToSet": {'items':
+                                                {'id': data.yid,
+                                                 'name': data.name,
+                                                 'votes': 0}
+                                              }}, function(err,response){
+
+      if (err){
+        console.log(err);
+      }
+      else{
+        console.log(JSON.stringify(response));
+        // router.io.sockets.in(playlist_id).emit('next_song', data);
+
       }
     });
   });

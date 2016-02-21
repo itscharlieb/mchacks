@@ -99,7 +99,6 @@ function populateListElements(data, isSearch){
     if (isSearch){
       var name = item.snippet.title;
       var yid = item.id.videoId;
-      console.log(item.snippet)
     
       elm = createListElement(name, yid, null, null);
     }
@@ -151,7 +150,6 @@ function createListElement(name, yid, _id, votes){
   var thumbnail = '<div class="col s4">'
     + '<img id="thumbnail" class="responsive-img" src="http://img.youtube.com/vi/'
     + yid + '/default.jpg"></div>';
-  console.log(thumbnail);
   elm.append(thumbnail);
 
   // create and add the song name label
@@ -159,6 +157,7 @@ function createListElement(name, yid, _id, votes){
   elm.append(songname);
 
   // add in the buttons and votes to non-search elements
+  // Use the presence of an _id tag to differentiate
   if (_id){
     var votes = '<div class="col s4"> <p id="vote_val"> ' + votes + '</p> </div>';
     elm.append(votes);
@@ -172,11 +171,59 @@ function createListElement(name, yid, _id, votes){
       + ' <i class="material-icons thumb_down"> </i> </button> </div> </div>'
     elm.append(ratecontainer);
   }
-  
+  else{
+    elm.click(function(){
+      var data = {};
+      data.yid = yid;
+      data.name = name;
+      
+      console.log("socket sent new_song");
+      socket.emit("new_song", data);
+    });
+  }
+
   return elm;
 }
 
 $( document ).ready(function() {
+  $('#search').keypress(function (e) {
+    if (e.which == 13) {
+      var query = $(this).val();
+      var api_key = "AIzaSyCmn8BkTbc1FOA6Z8yIBDDvsEf-e8Btfo0";
+
+      var queryString = "https://www.googleapis.com/youtube/v3/search?part=id%2Csnippet"
+      queryString += "&q=" + query + "&key=" + api_key;
+      console.log(queryString);
+
+      $.get( queryString, function( response ) {
+        var response = response.items;
+        populateListElements(response, true);
+      });
+
+      return false;
+    }
+  });
+
+  $('.vote').on('click', function(){
+    // There might be a better way to store this information
+    // Especially the playlist id... seems redundant
+    var data = {};
+
+    // Have to remove the double quotes... most annoying error ever
+    data.song_id = $(this).data('song_id').replace(/\"/g, "");
+    // var vote_obj = $(this).parent().parent().parent().find("#vote_val");
+
+    if($(this).attr("id") == "like"){
+      console.log("socket sent like");
+      socket.emit("like", data.song_id);
+    }
+    else{
+      console.log("socket sent dislike");
+      socket.emit("dislike", data.song_id);
+    }
+  });
+
+  // ------- SOCKET STUFF ------- \\
   socket.on("init", function(song_id){
     console.log("socket received init for [" + song_id + "]");
     player.loadVideoById(song_id);
@@ -199,95 +246,14 @@ $( document ).ready(function() {
 
   //next song message
   socket.on("next_song", function(song_id) {
-    console.log("socket received load video if for[" + song_id + "]");
+    console.log("socket received next song for[" + song_id + "]");
     player.loadVideoById(song_id);
   })
 
-  $('.vote').on('click', function(){
-    // There might be a better way to store this information
-    // Especially the playlist id... seems redundant
-    var data = {};
+  // New element message
+  socket.on("new_song", function(data) {
+    console.log("socket received new song for[" + song_id + "]");
 
-    // Have to remove the double quotes... most annoying error ever
-    data.song_id = $(this).data('song_id').replace(/\"/g, "");
-    // var vote_obj = $(this).parent().parent().parent().find("#vote_val");
 
-    if($(this).attr("id") == "like"){
-      console.log("socket sent like");
-      socket.emit("like", data.song_id);
-    }
-    else{
-      console.log("socket sent dislike");
-      socket.emit("dislike", data.song_id);
-    }
-
-    // $(this).attr("id") == "like" ? data.inc = 1 : data.inc = -1;
-    // $.ajax({
-    //   type: 'POST',
-    //   contentType: 'application/json',
-    //   url: '/playlist/song/vote',
-    //   data: JSON.stringify(data),
-    //   async: true,
-    //   statusCode: {
-    //     200: function(retval) {
-    //       console.log(retval);
-    //       vote_obj.text(parseInt(vote_obj.text()) + parseInt(retval));
-    //     },
-    //     400: function(data) {
-    //       console.log(data);
-    //       alert("Didn't work");
-    //     }
-    //   }
-    // });
-
-  });
-  $('#search').keypress(function (e) {
-    if (e.which == 13) {
-      var query = $(this).val();
-      var api_key = "AIzaSyCmn8BkTbc1FOA6Z8yIBDDvsEf-e8Btfo0";
-
-      var queryString = "https://www.googleapis.com/youtube/v3/search?part=id%2Csnippet"
-      queryString += "&q=" + query + "&key=" + api_key;
-      console.log(queryString);
-
-      $.get( queryString, function( response ) {
-        var response = response.items;
-        populateListElements(response, true);
-
-        /*
-        $.each(response, function(i, item) {
-          newElm.click(function(){
-            var data = {};
-            data.songId = $(this).data('vidId');
-            data.songName = $(this).find('#songName').text();
-            $.ajax({
-              type: 'POST',
-              contentType: 'application/json',
-              url: '/playlist/add',
-              data: JSON.stringify(data),
-              async: true,
-              statusCode: {
-                200: function(playlist_id) {
-                  console.log(playlist_id);
-                  window.location.replace("/playlist/" + playlist_id);
-                },
-                400: function(data) {
-                  console.log(data);
-                  alert("Didn't work");
-                }
-              }
-            });
-            $(this).parent().remove();
-          });
-          newContainer.append(newElm);
-          // What to append to
-        });
-
-        newContainer.append("</div>");
-        */
-      });
-
-      return false;
-    }
-  });
+  })
 });
