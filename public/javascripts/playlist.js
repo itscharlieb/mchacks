@@ -36,6 +36,25 @@ function onPlayerStateChange(event) {
     setTimeout(stopVideo, 6000);
     done = true;
   }
+  if (event.data == 0){
+    $.ajax({
+      type: 'POST',
+      contentType: 'application/json',
+      url: '/playlist/next',
+      async: true,
+      statusCode: {
+        200: function(nextSong) {
+          console.log(nextSong);
+          player.loadVideoById(nextSong);
+        },
+        400: function(data) {
+          console.log(data);
+          alert("Didn't work");
+        }
+      }
+
+    });
+  }
 }
 function stopVideo() {
   player.stopVideo();
@@ -82,10 +101,11 @@ $( document ).ready(function() {
       $.get( queryString, function( response ) { 
         $.each(response, function(i, item) {
           console.log(item);
+          $('#searchResult');
         });     
       });
 
-      return false;    //<---- Add this line
+      return false; 
     }
   });
 });
