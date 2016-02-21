@@ -91,8 +91,9 @@ var playlist_id = null;
 router.get('/playlist/:id', function(req, res, next) {
   playlist_id = req.params.id;
 
+  // Seems like a rather inefficient way of doing things...
+  // TODO revamp this query, must be a way of sorting easier
   Playlist.aggregate([{'$match': {'_id': mongoose.Types.ObjectId(playlist_id)}},
-                      {'$project': {'items':'$items', 'name':'$name'}}, 
                       {'$unwind': '$items'}, {'$sort': {'items.votes': -1}},
                     ]).exec(function(err, playlist){
     if (err){
