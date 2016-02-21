@@ -92,71 +92,6 @@ var playlist_id = null;
 router.get('/playlist/:id', function(req, res, next) {
   playlist_id = req.params.id;
 
-  router.io.on('connection', function(socket) {
-    socket.join(playlist_id);
-    console.log('socket connection');
-    // TODO Should probably compress like and dislike into one data object
-    socket.on('like', function(data){
-      console.log("like emitted");
-      console.log(data);
-      Playlist.findOneAndUpdate({"items._id": mongoose.Types.ObjectId(data)}, {"$inc": {"items.$.votes":1}}, function(err, response){
-        if (err){
-          console.log(err);
-          res.status(500).send(err);
-        }
-        else{
-          // TODO fix this response_data later
-          // Essentially want the db value to maintain persistence
-          var response_data = {};
-          response_data.song_id = data;
-          // For whatever reason it does not respond with the updated version
-          response_data.votes = response.items.votes+1;
-          router.io.sockets.in(playlist_id).emit('like', data);
-        }
-      });
-    });
-    socket.on('dislike', function(data){
-      console.log("dislike emitted");
-      Playlist.findOneAndUpdate({"items._id": data}, {"$inc": {"items.$.votes":-1}}, function(err, response){
-        if (err){
-          console.log(err);
-          res.status(500).send(err);
-        }
-        else{
-          // TODO fix this response_data later
-          // Essentially want the db value to maintain persistence
-          var response_data = {};
-          response_data.song_id = data;
-          // For whatever reason it does not respond with the updated version
-          response_data.votes = response.items.votes-1;
-          router.io.sockets.in(playlist_id).emit('dislike', data);
-        }
-      });
-    });
-    socket.on('next_song', function(){
-      console.log("next_song emitted");
-      console.log(playlist_id);
-      Playlist.aggregate([{'$match': {'_id': mongoose.Types.ObjectId(playlist_id)}},
-                          {'$project': {'items':'$items', '_id':0}},
-                          {'$unwind': '$items'}, {'$sort': {'items.votes': -1}},
-                          {'$limit': 1}]).exec(function(err, response){
-        if (err){
-          console.log(err);
-          res.status(500).send(err);
-        }
-        else{
-          var song_id = response[0].items._id;
-          Playlist.findOneAndUpdate({"items._id": song_id}, {"$set": {"items.$.votes":0}}, function(err, response){
-            if (err) console.log(err);
-          });
-          // TODO need to set the current playing votes to 0
-          router.io.sockets.in(playlist_id).emit('next_song', response[0].items.id);
-        }
-      });
-    });
-  });
-  //add user to socket room
-  // router.io.join('test');
 
   // Seems like a rather inefficient way of doing things...
   // TODO revamp this query, must be a way of sorting easier
@@ -194,6 +129,9 @@ router.post('/playlist/create', function(req, res){
     }
   });
 });
+
+
+
 
 
 router.post('/playlist/song/vote', function(req, res){
@@ -241,6 +179,87 @@ router.post('/playlist/add', function(req, res){
 module.exports = function(io){
   router.io = io;
 
+router.io.on('connection', function(socket) {
+  socket.join(playlist_id);
+  console.log('socket connection');
+
+  // On init logic
+  // Need a way of getting timestamp logic
+
+
+
+  // TODO Should probably compress like and dislike into one data object
+  socket.on('like', function(data){
+    console.log("like emitted");
+    Playlist.findOneAndUpdate({"items._id": mongoose.Types.ObjectId(data)}, {"$inc": {"items.$.votes":1}}, function(err, response){
+      if (err){
+        console.log(err);
+        res.status(500).send(err);
+      }
+      else{
+        // TODO fix this response_data later
+        // Essentially want the db value to maintain persistence
+        var response_data = {};
+        response_data.song_id = data;
+        // For whatever reason it does not respond with the updated version
+        response_data.votes = response.items.votes+1;
+        router.io.sockets.in(playlist_id).emit('like', data);
+      }
+    });
+  });
+  socket.on('dislike', function(data){
+    console.log("dislike emitted");
+    Playlist.findOneAndUpdate({"items._id": data}, {"$inc": {"items.$.votes":-1}}, function(err, response){
+      if (err){
+        console.log(err);
+        res.status(500).send(err);
+      }
+      else{
+        // TODO fix this response_data later
+        // Essentially want the db value to maintain persistence
+        var response_data = {};
+        response_data.song_id = data;
+        // For whatever reason it does not respond with the updated version
+        response_data.votes = response.items.votes-1;
+        router.io.sockets.in(playlist_id).emit('dislike', data);
+      }
+    });
+  });
+  socket.on('next_song', function(){
+    console.log("next_song emitted");
+    console.log(playlist_id);
+    Playlist.aggregate([{'$match': {'_id': mongoose.Types.ObjectId(playlist_id)}},
+                        {'$project': {'items':'$items', '_id':0}},
+                        {'$unwind': '$items'}, {'$sort': {'items.votes': -1}},
+                        {'$limit': 1}]).exec(function(err, response){
+      if (err){
+        console.log(err);
+        res.status(500).send(err);
+      }
+      else{
+        var song_id = response[0].items._id;
+        Playlist.findOneAndUpdate({"items._id": song_id}, {"$set": {"items.$.votes":0}}, function(err, response){
+          if (err) console.log(err);
+        });
+        // TODO need to set the current playing votes to 0
+        router.io.sockets.in(playlist_id).emit('next_song', response[0].items.id);
+      }
+    });
+  });
+  
+  socket.on('disconnect', function () {
+    console.log('disconnected event');
+    //socket.manager.onClientDisconnect(socket.id); --> endless loop with this disconnect event on server side
+    socket.disconnect();
+  });
+  
+});
+//add user to socket room
+// router.io.join('test');
 
   return router;
 }
+
+
+
+
