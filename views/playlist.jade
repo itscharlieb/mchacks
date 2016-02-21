@@ -26,7 +26,7 @@ mixin song(song, index)
         div.col.s4
           p= song.name
         div.col.s4
-          p= song.votes
+          p#vote_val= song.votes
         div.col.s2
           div.row
             button.vote(id="like" data-playlist_id=playlist._id, data-song_id=song._id)

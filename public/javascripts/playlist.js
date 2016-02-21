@@ -50,7 +50,8 @@ $( document ).ready(function() {
       data.playlist_id = $(this).data('playlist_id').replace(/\"/g, "");
       data.song_id = $(this).data('song_id').replace(/\"/g, "");
       $(this).attr("id") == "like" ? data.inc = 1 : data.inc = -1;
-      console.log(data.inc);
+
+      var vote_obj = $(this).parent().parent().parent().find("#vote_val");
       $.ajax({
         type: 'POST',
         contentType: 'application/json',
@@ -58,9 +59,9 @@ $( document ).ready(function() {
         data: JSON.stringify(data),
         async: true,
         statusCode: {
-          200: function(data) {
-            console.log(data);
-            
+          200: function(retval) {
+            console.log(retval);
+            vote_obj.text(parseInt(vote_obj.text()) + parseInt(retval));
           },
           400: function(data) {
             console.log(data);

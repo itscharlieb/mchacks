@@ -112,7 +112,11 @@ router.post('/playlist/song/vote', function(req, res){
     }
     else{
       console.log(JSON.stringify(response));
-      res.status(200).send(response);
+
+      // TODO check if user has already voted on this 
+      // Check if it worked, if it did then send the incrementation back...
+      // If it didn't (like if the user already voted) send back a 0
+      res.status(200).send(JSON.stringify(req.body.inc));
     }
   });
 });
