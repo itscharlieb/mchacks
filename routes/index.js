@@ -4,7 +4,6 @@ var mongoose = require('mongoose');
 var $ = require('jQuery');
 
 
-
 mongoose.connect('mongodb://localhost/McHacks', function (error) {
   if (error) {
       console.log(error);
@@ -138,7 +137,7 @@ router.post('/playlist/song/vote', function(req, res){
     else{
       console.log(JSON.stringify(response));
 
-      // TODO check if user has already voted on this 
+      // TODO check if user has already voted on this
       // Check if it worked, if it did then send the incrementation back...
       // If it didn't (like if the user already voted) send back a 0
       res.status(200).send(JSON.stringify(req.body.inc));
@@ -149,7 +148,7 @@ router.post('/playlist/song/vote', function(req, res){
 
 router.post('/playlist/next', function(req, res){
   Playlist.aggregate([{'$match': {'_id': mongoose.Types.ObjectId(playlist_id)}},
-                      {'$project': {'items':'$items', '_id':0}}, 
+                      {'$project': {'items':'$items', '_id':0}},
                       {'$unwind': '$items'}, {'$sort': {'items.votes': -1}},
                       {'$limit': 1}]).exec(function(err, response){
     if (err){
@@ -168,10 +167,9 @@ router.post('/playlist/next', function(req, res){
 });
 
 
-
 router.post('/playlist/add', function(req, res){
   Playlist.findByIdAndUpdate(mongoose.Types.ObjectId(playlist_id),
-                              {"$addToSet": {'items': 
+                              {"$addToSet": {'items':
                                               {'id': req.body.songId,
                                                'name': req.body.songName,
                                                'votes': 0}
@@ -182,11 +180,16 @@ router.post('/playlist/add', function(req, res){
       res.status(500).send(err);
     }
     else{
-      // Don't really need to pass anything... would be cooler to do this 
+      // Don't really need to pass anything... would be cooler to do this
       // without reloading the page though..
       res.status(200).send(playlist_id);
     }
   });
 });
 
-module.exports = router;
+module.exports = function(io){
+  io.on('connection', function(socket) {
+    console.log('socket connection');
+  });
+  return router;
+}

@@ -1,6 +1,7 @@
 //TODO I really don't like how this loads... its all laggy and jumpy
 // probably can be fixed with better html stylings
 // 2. This code loads the IFrame Player API code asynchronously.
+
 var tag = document.createElement('script');
 
 tag.src = "https://www.youtube.com/iframe_api";
@@ -61,6 +62,8 @@ function stopVideo() {
 }
 
 $( document ).ready(function() {
+  var socket = io();
+
   $('.vote').on('click', function(){
     // There might be a better way to store this information
     // Especially the playlist id... seems redundant
@@ -104,7 +107,7 @@ $( document ).ready(function() {
         var templateElm = $('#playlistItems').clone();
         templateElm.find('.removeSearch').remove();
         var response = response.items;
-        
+
 
         $.each(response, function(i, item) {
           var newElm = templateElm.clone();
