@@ -92,6 +92,9 @@ var playlist_id = null;
 router.get('/playlist/:id', function(req, res, next) {
   playlist_id = req.params.id;
 
+  //add user to socket room
+  // router.io.join('test');
+
   // Seems like a rather inefficient way of doing things...
   // TODO revamp this query, must be a way of sorting easier
   Playlist.aggregate([{'$match': {'_id': mongoose.Types.ObjectId(playlist_id)}},
@@ -137,6 +140,7 @@ router.post('/playlist/song/vote', function(req, res){
     else{
       console.log(JSON.stringify(response));
 
+      router.io.emit('like', song_id)
       // TODO check if user has already voted on this
       // Check if it worked, if it did then send the incrementation back...
       // If it didn't (like if the user already voted) send back a 0

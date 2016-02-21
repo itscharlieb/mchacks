@@ -70,7 +70,7 @@ $( document ).ready(function() {
     var data = {};
     // Have to remove the double quotes... most annoying error ever
     data.song_id = $(this).data('song_id').replace(/\"/g, "");
-    $(this).attr("id") == "like" ? data.inc = 1 : data.inc = -1;
+    // $(this).attr("id") == "like" ? data.inc = 1 : data.inc = -1;
 
     var vote_obj = $(this).parent().parent().parent().find("#vote_val");
     $.ajax({
