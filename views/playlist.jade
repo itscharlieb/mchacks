@@ -13,10 +13,11 @@ block content
           +song(song, index)
     div.col.s8
       div.center-align
-        div(id="player", data-vid_id=playlist.items[0].id)
+        div(id="player", data-vid_id=playlist[0].items.id)
 
                     
 mixin song(song, index)
+  - var song = song.items
   -if (index != 0)
     li.collection-item.valign-wrapper
       div.col.s2

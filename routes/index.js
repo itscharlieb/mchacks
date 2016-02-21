@@ -87,23 +87,29 @@ router.get('/', function(req, res, next) {
   });
 });
 
-
+var playlist_id = null;
 router.get('/playlist/:id', function(req, res, next) {
-  var playlistId = req.params.id;
+  playlist_id = req.params.id;
 
-  Playlist.findById(playlistId, function(err,playlist){
+  // Seems like a rather inefficient way of doing things...
+  // TODO revamp this query, must be a way of sorting easier
+  Playlist.aggregate([{'$match': {'_id': mongoose.Types.ObjectId(playlist_id)}},
+                      {'$unwind': '$items'}, {'$sort': {'items.votes': -1}},
+                    ]).exec(function(err, playlist){
     if (err){
       console.log(err);
       res.status(500).send(err);
     }
     else{
+      console.log(playlist);
       res.render('playlist', { playlist:playlist });
     }
   });
 });
 
+
+
 router.post('/playlist/song/vote', function(req, res){
-  var playlist_id = req.body.playlist_id;
   var song_id = req.body.song_id;
   // Playlist.aggregate([{ $unwind : "$items" }, { $match : {_id: song_id}}]).exec(function(err, response){
   Playlist.findOneAndUpdate({"items._id": song_id}, {"$inc": {"items.$.votes":req.body.inc}}, function(err, response){
@@ -124,14 +130,17 @@ router.post('/playlist/song/vote', function(req, res){
 
 
 router.post('/playlist/next', function(req, res){
-  Playlist.findOne(function(err, response){
+  Playlist.aggregate([{'$match': {'_id': mongoose.Types.ObjectId(playlist_id)}},
+                      {'$project': {'items':'$items', '_id':0}}, 
+                      {'$unwind': '$items'}, {'$sort': {'items.votes': -1}},
+                      {'$limit': 1}]).exec(function(err, response){
     if (err){
       console.log(err);
       res.status(500).send(err);
     }
     else{
-      //TODO temporary argument id, fix query
-      res.status(200).send(response.items[1].id);
+      // TODO need to set the current playing votes to 0
+      res.status(200).send(response[0].items.id);
     }
   });
 });
