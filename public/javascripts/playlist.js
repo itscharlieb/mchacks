@@ -100,6 +100,7 @@ $( document ).ready(function() {
       console.log(queryString);
       $.get( queryString, function( response ) {
         // TODO should probably do this as all strings like the newContainer
+        // Best to make this scrollable instead of the entire card
         var newContainer = $('<div class="collection z-depth-1">')
         var templateElm = $('#playlistItems').clone();
         templateElm.find('.removeSearch').remove();
