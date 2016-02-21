@@ -105,11 +105,14 @@ router.get('/playlist/:id', function(req, res, next) {
       res.status(500).send(err);
     }
     else{
-      var song_id = playlist[0].items._id;
-      Playlist.findOneAndUpdate({"items._id": song_id}, {"$set": {"items.$.votes":0}}, function(err, response){
-        if (err) console.log(err);
-      });
-      res.render('playlist', { playlist:playlist });
+      if (playlist.length != 0){
+        var song_id = playlist[0].items._id;
+        Playlist.findOneAndUpdate({"items._id": song_id}, {"$set": {"items.$.votes":0}}, function(err, response){
+          if (err) console.log(err);
+        });
+        res.render('playlist', { playlist:playlist });
+      }
+      res.render('playlist', { });
     }
   });
 });
