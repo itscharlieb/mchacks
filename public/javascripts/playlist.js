@@ -66,7 +66,6 @@ $( document ).ready(function() {
     // Especially the playlist id... seems redundant
     var data = {};
     // Have to remove the double quotes... most annoying error ever
-    data.playlist_id = $(this).data('playlist_id').replace(/\"/g, "");
     data.song_id = $(this).data('song_id').replace(/\"/g, "");
     $(this).attr("id") == "like" ? data.inc = 1 : data.inc = -1;
 
@@ -113,6 +112,10 @@ $( document ).ready(function() {
           console.log(item);
           newElm.find('#thumbnail').attr('src', item.snippet.thumbnails.default.url);
           newElm.find('#songName').text(item.snippet.title);
+          newElm.click(function(){
+            
+            $(this).parent().remove();
+          });
           newContainer.append(newElm);
           // What to append to
         });
