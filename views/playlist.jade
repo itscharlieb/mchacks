@@ -20,7 +20,9 @@ mixin song(song, index)
           span.black-text
             h5= song.name
         div.col.s2
-          div.row  
-            i.material-icons thumb_up
           div.row
-            i.material-icons thumb_down
+            button(id="like" data-playlist_id=playlist._id, data-song_id=song._id)
+              i.material-icons thumb_up
+          div.row
+            button(id="dislike" data-playlist_id=playlist._id, data-song_id=song._id)
+              i.material-icons thumb_down
