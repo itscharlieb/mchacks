@@ -173,6 +173,7 @@ router.post('/playlist/add', function(req, res){
 });
 
 module.exports = function(io){
+  router.io = io;
   io.on('connection', function(socket) {
     console.log('socket connection');
   });
