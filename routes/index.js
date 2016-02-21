@@ -101,4 +101,21 @@ router.get('/playlist/:id', function(req, res, next) {
   });
 });
 
+router.post('/playlist/song/vote', function(req, res){
+  var playlist_id = req.body.playlist_id;
+  var song_id = req.body.song_id;
+  Playlist.find({"_id": ObjectId.fromString(playlist_id), 
+                  "items.id": ObjectId.fromString(song_id)}, function(err, response){
+    if (err){
+      console.log(err);
+      res.status(500).send(err);
+    }
+    else{
+      console.log(response);
+      res.status(200).send(response);
+    }
+  });
+});
+
+
 module.exports = router;

@@ -9,5 +9,5 @@ block content
       each song,index in playlist.items
         -if (index != 0)
           li= song.name
-            button(id="like")
+            button(id="like", data-playlist_id=playlist._id, data-song_id=song._id)
             i.material-icons.right
