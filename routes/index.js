@@ -1,7 +1,6 @@
 var express = require('express');
 var router = express.Router();
 var mongoose = require('mongoose');
-var $ = require('jQuery');
 
 
 mongoose.connect('mongodb://localhost/McHacks', function (error) {
