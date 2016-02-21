@@ -1,12 +1,8 @@
 extends layout
 
 block content
-	div.container.std-margins
-		//div(id='player')
-		div.row.center
-			div.video-container
-				iframe(width="853" height="480" src="//www.youtube.com/embed/Q8TXgCzxEnw")
-				div#player
-
-		div.row
-
+  div.container.std-margins
+    ul
+      each val in playlists
+        li 
+          a(href='/playlist/'+val._id) #{val.name}
