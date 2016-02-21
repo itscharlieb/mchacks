@@ -200,5 +200,11 @@ module.exports = function(io){
   io.on('connection', function(socket) {
     console.log('socket connection');
   });
+  io.on('like', function(socket){
+    io.emit('like', 'everyone');
+  });
+  io.on('dislike', function(socket){
+    io.emit('dislike', 'everyone');
+  });
   return router;
 }
