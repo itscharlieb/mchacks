@@ -1,4 +1,4 @@
-extends layout
+extends nav_layout
 
 block content
   div.container.std-margins
@@ -9,13 +9,22 @@ block content
     div.row
       div.col.s8.offset-s2
         a.btn Browse Playlists
-          i.material-icons.right send
+          i.material-icons.right send  
     div.row
       div.col.s8.offset-s2
-        a.btn Load a playlist by id
-          i.material-icons.right send
-    a.button
-    ul
-      each val in playlists
-        li 
-          a(href='/playlist/'+val._id) #{val.name}
+        ul.collection
+          each playlist in playlists
+            +playlist(playlist)
+        
+mixin playlist(playlist)
+  li.collection-item
+    a(href="/playlist/" + playlist._id) #{playlist.name}
+    //- div.row
+    //-   div.col.s8.offset-s2
+    //-     a.btn Load a playlist by id
+    //-       i.material-icons.right send
+    //- a.button
+    //- ul
+    //-   each val in playlists
+    //-     li 
+    //-       a(href='/playlist/'+val._id) #{val.name}
