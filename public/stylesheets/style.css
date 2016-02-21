@@ -1,18 +1,12 @@
 body {
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  background-image: url("https://www.berklee.edu/sites/default/files/Berklee-Headphones_SLIDER_07-06-15.jpg");
+  background-size: cover;
 }
 
 a {
   color: #00B7FF;
 }
-
-/*nav {
-  position: fixed;
-  top: 0;
-  right: 0;
-  left: 0;
-  width: 100%;
-}*/
 
 .std-margins {
   position: absolute;

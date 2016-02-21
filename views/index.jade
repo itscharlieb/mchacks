@@ -1,13 +1,20 @@
-extends nav_layout
+extends layout
 
 block content
   div.container.std-margins
+    //- form(name="create", action="playlist/create", method="post")
     div.row
-      form(name="create", action="playlist/create", method="post")
-        div.input-field.col.s8
-          input(placeholder="Enter a playlist name" id="name" class="validate")
-        button.btn.col.s4(type="submit", name="action") Create
+      div.input-field.col.s8.offset-s2
+        input(placeholder="CREATE A PLAYLIST" id="name" class="validate")
+    div.row
+      div.col.s8.offset-s2
+        a.btn Browse Playlists
           i.material-icons.right send
+    div.row
+      div.col.s8.offset-s2
+        a.btn Load a playlist by id
+          i.material-icons.right send
+    a.button
     ul
       each val in playlists
         li 
