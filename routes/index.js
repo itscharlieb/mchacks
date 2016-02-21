@@ -123,19 +123,4 @@ router.post('/playlist/song/vote', function(req, res){
 });
 
 
-var api_key = "AIzaSyCmn8BkTbc1FOA6Z8yIBDDvsEf-e8Btfo0";
-router.post('/playlist/search', function(req, res){
-  var query = req.body.search;
-  console.log(query);
-  var queryString = "https://www.googleapis.com/youtube/v3/search?part=id%2Csnippet"
-  queryString += "&q=" + query + "&key=" + api_key;
-  console.log(queryString);
-  $.get( queryString, function( response ) { 
-    $.each(response, function(i, item) {
-      console.log(item);
-    });     
-  });
-
-});
-
 module.exports = router;

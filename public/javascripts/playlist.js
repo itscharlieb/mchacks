@@ -73,25 +73,18 @@ $( document ).ready(function() {
   });
   $('#search').keypress(function (e) {
     if (e.which == 13) {
-      data = {};
-      data.search = $(this).val();
-      $.ajax({
-        type: 'POST',
-        contentType: 'application/json',
-        url: '/playlist/search',
-        data: JSON.stringify(data),
-        async: true,
-        statusCode: {
-          200: function(data) {
-            console.log(data);
-            // Will need to populate with the data returned
-          },
-          400: function(data) {
-            console.log(data);
-            alert("Didn't work");
-          }
-        }
+      var query = $(this).val();
+      var api_key = "AIzaSyCmn8BkTbc1FOA6Z8yIBDDvsEf-e8Btfo0";
+
+      var queryString = "https://www.googleapis.com/youtube/v3/search?part=id%2Csnippet"
+      queryString += "&q=" + query + "&key=" + api_key;
+      console.log(queryString);
+      $.get( queryString, function( response ) { 
+        $.each(response, function(i, item) {
+          console.log(item);
+        });     
       });
+
       return false;    //<---- Add this line
     }
   });
