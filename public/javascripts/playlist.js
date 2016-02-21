@@ -42,26 +42,49 @@ function stopVideo() {
 }
 
 $( document ).ready(function() {
-    $('.vote').on('click', function(){
-      // There might be a better way to store this information
-      // Especially the playlist id... seems redundant
-      var data = {};
-      // Have to remove the double quotes... most annoying error ever
-      data.playlist_id = $(this).data('playlist_id').replace(/\"/g, "");
-      data.song_id = $(this).data('song_id').replace(/\"/g, "");
-      $(this).attr("id") == "like" ? data.inc = 1 : data.inc = -1;
+  $('.vote').on('click', function(){
+    // There might be a better way to store this information
+    // Especially the playlist id... seems redundant
+    var data = {};
+    // Have to remove the double quotes... most annoying error ever
+    data.playlist_id = $(this).data('playlist_id').replace(/\"/g, "");
+    data.song_id = $(this).data('song_id').replace(/\"/g, "");
+    $(this).attr("id") == "like" ? data.inc = 1 : data.inc = -1;
 
-      var vote_obj = $(this).parent().parent().parent().find("#vote_val");
+    var vote_obj = $(this).parent().parent().parent().find("#vote_val");
+    $.ajax({
+      type: 'POST',
+      contentType: 'application/json',
+      url: '/playlist/song/vote',
+      data: JSON.stringify(data),
+      async: true,
+      statusCode: {
+        200: function(retval) {
+          console.log(retval);
+          vote_obj.text(parseInt(vote_obj.text()) + parseInt(retval));
+        },
+        400: function(data) {
+          console.log(data);
+          alert("Didn't work");
+        }
+      }
+    });
+
+  });
+  $('#search').keypress(function (e) {
+    if (e.which == 13) {
+      data = {};
+      data.search = $(this).val();
       $.ajax({
         type: 'POST',
         contentType: 'application/json',
-        url: '/playlist/song/vote',
+        url: '/playlist/search',
         data: JSON.stringify(data),
         async: true,
         statusCode: {
-          200: function(retval) {
-            console.log(retval);
-            vote_obj.text(parseInt(vote_obj.text()) + parseInt(retval));
+          200: function(data) {
+            console.log(data);
+            // Will need to populate with the data returned
           },
           400: function(data) {
             console.log(data);
@@ -69,7 +92,8 @@ $( document ).ready(function() {
           }
         }
       });
-
-    });
+      return false;    //<---- Add this line
+    }
+  });
 });
 
