@@ -13,7 +13,6 @@ nav {
   vertical-align: middle;
 }
 
-.something {
+.scrollable {
   overflow-y: scroll;
-  height: 50%;
 }
