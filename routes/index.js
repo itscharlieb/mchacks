@@ -105,7 +105,7 @@ router.post('/playlist/song/vote', function(req, res){
   var playlist_id = req.body.playlist_id;
   var song_id = req.body.song_id;
   // Playlist.aggregate([{ $unwind : "$items" }, { $match : {_id: song_id}}]).exec(function(err, response){
-  Playlist.findOneAndUpdate({"items._id": song_id}, {"$inc": {"items.$.votes":1}}, function(err, response){
+  Playlist.findOneAndUpdate({"items._id": song_id}, {"$inc": {"items.$.votes":req.body.inc}}, function(err, response){
     if (err){
       console.log(err);
       res.status(500).send(err);

@@ -42,13 +42,15 @@ function stopVideo() {
 }
 
 $( document ).ready(function() {
-    $('#like').on('click', function(){
+    $('.vote').on('click', function(){
       // There might be a better way to store this information
       // Especially the playlist id... seems redundant
       var data = {};
       // Have to remove the double quotes... most annoying error ever
       data.playlist_id = $(this).data('playlist_id').replace(/\"/g, "");
       data.song_id = $(this).data('song_id').replace(/\"/g, "");
+      $(this).attr("id") == "like" ? data.inc = 1 : data.inc = -1;
+      console.log(data.inc);
       $.ajax({
         type: 'POST',
         contentType: 'application/json',
@@ -58,6 +60,7 @@ $( document ).ready(function() {
         statusCode: {
           200: function(data) {
             console.log(data);
+            
           },
           400: function(data) {
             console.log(data);
