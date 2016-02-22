@@ -100,14 +100,13 @@ function populateListElements(data, isSearch){
       var name = item.snippet.title;
       var yid = item.id.videoId;
     
-      elm = createListElement(name, yid, null, null);
+      elm = createListElement(name, yid, null);
     }
     else{
       var item = item.items;
 
       var name = item.get('name');
       var yid = item.get('id');
-      var _id = item.get('_id');
       var votes = item.get('votes');
 
       // This will be the video that should be played
@@ -123,7 +122,7 @@ function populateListElements(data, isSearch){
         return true;
       }
       else{
-        elm = createListElement(name, yid, _id, votes);
+        elm = createListElement(name, yid, votes);
       }
     }
 
@@ -138,12 +137,12 @@ function populateListElements(data, isSearch){
   });
 }
 
-function createListElement(name, yid, _id, votes){
+function createListElement(name, yid, votes){
   // The list element
   var elm = $(document.createElement('li'));
   elm.addClass('collection-item valign-wrapper');
     
-  if (_id) elm.attr('id', _id);
+  elm.attr('id', yid);
 
 
   // create and add the thumbnail object
@@ -158,7 +157,7 @@ function createListElement(name, yid, _id, votes){
 
   // add in the buttons and votes to non-search elements
   // Use the presence of an _id tag to differentiate
-  if (_id){
+  if (votes){
     var votes = '<div class="col s4"> <p id="vote_val"> ' + votes + '</p> </div>';
     elm.append(votes);
 
@@ -211,6 +210,7 @@ $( document ).ready(function() {
 
     // Have to remove the double quotes... most annoying error ever
     data.song_id = $(this).data('song_id').replace(/\"/g, "");
+    JSON.stringify(data);
     // var vote_obj = $(this).parent().parent().parent().find("#vote_val");
 
     if($(this).attr("id") == "like"){
@@ -233,6 +233,7 @@ $( document ).ready(function() {
   socket.on("like", function(song_id){
     console.log("socket received like for [" + song_id + "]");
     var vote_obj = $("#" + song_id).find('#vote_val');
+    console.log(vote_obj.text());
     vote_obj.text(parseInt(vote_obj.text()) + 1);
   });
 
@@ -253,7 +254,6 @@ $( document ).ready(function() {
   // New element message
   socket.on("new_song", function(data) {
     console.log("socket received new song for[" + song_id + "]");
-
-
+    createListElement(data.name, data.yid, 0)
   })
 });

@@ -24,7 +24,7 @@ block content
 mixin song(song, index)
   - var song = song.items
   -if (index != 0)
-    li.collection-item.valign-wrapper('id'=song._id)
+    li.collection-item.valign-wrapper('id'=song.id)
       div.col.s2
         - var thumbnailUrl = "http://img.youtube.com/vi/" + song.id + "/default.jpg"
         img#thumbnail.responsive-img(src=thumbnailUrl)
@@ -34,8 +34,8 @@ mixin song(song, index)
         p#vote_val= song.votes
       div.col.s2.removeSearch
         div.row
-          button.btn-floating.green.darken-4.vote(id="like" data-playlist_id=playlist._id, data-song_id=song._id)
+          button.btn-floating.green.darken-4.vote(id="like" data-song_id=song.id)
             i.material-icons thumb_up
         div.col.s2
-          button.btn-floating.red.darken-4.vote(id="dislike" data-playlist_id=playlist._id, data-song_id=song._id)
+          button.btn-floating.red.darken-4.vote(id="dislike" data-song_id=song.id)
             i.material-icons thumb_down
