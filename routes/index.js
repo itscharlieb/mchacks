@@ -1,7 +1,70 @@
-// TODO
-//    The main thing to do now is to find a way to sync the times across users
-//    Should create users after that
+// TODO Pertinent
+//    Should create users
 //    Then fix the voting issues
+//    Fix the scrollable bars, they look kindof bad in my UI
+
+
+// TODO Later: Adding configuration options to a playlist
+// Playing mode
+//    Synced: All the clients are synced to the masters flow 
+//        All of the clients play the video
+//        This might be difficult and not worth pursuing
+//        Would be good for things like silent discos
+//          or if you are listening to an audiobook with someone
+//          or if you are studying with someone
+//    Live: In this we don't really need the player
+//        Just the queue, a searchbar, and a now playing
+//        Might be useful to have a semi-livestream to see where the video is
+//          This isn't really necessary 
+//          Might be worth adding if we figure out livestream
+//    Passive: Like a songza, 8tracks or other type of video playlist app
+//        The videos play from the beginning of the playlist
+//        What we have now
+//        
+// Play collaboration mode
+//    Full collaboration: All parties can pause or change video time
+//    Master-slave: Only the master can pause or change the video time
+//    No collaboration: The parties are independent in their playing
+//        What we have now
+//
+// Playlist collaboration options
+// Consider having "groups" with different privaledges
+//    Full collaboration: All parties can add/remove songs and cast votes
+//    No removal: Full collab but without the ability to remove
+//        What we have now
+//    Voting only: Only allow users to vote on the songs
+//    No collaboration: Can only access the playlist
+//
+// Playlist Visibility
+//    Public: Everyone can easily find and use (published)
+//        What we have now
+//    Hidden: Anyone with the link can access 
+//    Private: Need a key to access
+//
+// Video termination options (don't really know what to call this)
+//    Delete: When the video is watched it is "removed" from the playlist
+//        Use case: say I have a set of videos that I want to watch, 
+//          but haven't gotten around to watching yet.
+//          You could make a playlist that removes the videos when they have been watched
+//        Could also be used to keep playlists smaller
+//    Reset votes: When the video is watched the votes are reset to 0
+//        What we have now
+//
+// Vote threshold: if a video goes below a certain number of downvotes, will be deleted
+//
+
+
+// TODO possible DB change
+// Could change the DB to have a videos collection instead of having it embedded
+// This would allow us to have global ratings object (and other attrs) for a given video
+// The items subdocument would still exist in the playlist
+//    This would be like a "votes" for the specific playlist
+//    And a foreign key to the video in the videos collection
+// If we do change to this, we should use SQL
+//    The highly relational nature of this system lends itself well to relational DBs
+
+// TODO constructing your own playlist
+// Consider having the option to "add to playlist" for videos in other playlists
 
 var express = require('express');
 var router = express.Router();
