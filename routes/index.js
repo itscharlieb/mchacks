@@ -52,6 +52,12 @@
 //
 // Vote threshold: if a video goes below a certain number of downvotes, will be deleted
 //
+// Sorting Mode
+//    Sort by ratings
+//        What we have now
+//    Sort by time added
+//        Works as a classic queue instead of a priority queue
+//
 
 
 // TODO possible DB change
