@@ -87,10 +87,12 @@ function populateListElements(data, isSearch){
   var newContainer = $(document.createElement('div'));
   newContainer.addClass('collection z-depth-1');
 
-  if(!isSearch){
+  if(isSearch){
+    newContainer.attr('id', 'searchResults');
+  }
+  else{
     newContainer = $('#songItems');
   }
-
 
   $.each(data, function(i, item) {
     var elm = null;
@@ -176,6 +178,8 @@ function createListElement(name, yid, votes){
       data.yid = yid;
       data.name = name;
       
+      $('#searchResults').remove();
+
       console.log("socket sent new_song");
       socket.emit("new_song", data);
     });
@@ -195,6 +199,8 @@ $( document ).ready(function() {
       console.log(queryString);
 
       $.get( queryString, function( response ) {
+        $('#searchResults').remove();
+
         var response = response.items;
         populateListElements(response, true);
       });
@@ -252,6 +258,7 @@ $( document ).ready(function() {
   })
 
   // New element message
+  // TODO add error logic if the item already exists
   socket.on("new_song", function(data) {
     console.log("socket received new song for[" + song_id + "]");
     createListElement(data.name, data.yid, 0)
