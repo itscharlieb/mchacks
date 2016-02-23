@@ -148,7 +148,7 @@ function createListElement(name, yid, votes){
 
 
   // create and add the thumbnail object
-  var thumbnail = '<div class="col s4">'
+  var thumbnail = '<div class="col s2">'
     + '<img id="thumbnail" class="responsive-img" src="http://img.youtube.com/vi/'
     + yid + '/default.jpg"></div>';
   elm.append(thumbnail);
@@ -159,17 +159,17 @@ function createListElement(name, yid, votes){
 
   // add in the buttons and votes to non-search elements
   // Use the presence of an _id tag to differentiate
-  if (votes){
+  if (votes !== null){
     var votes = '<div class="col s4"> <p id="vote_val"> ' + votes + '</p> </div>';
     elm.append(votes);
 
     var ratecontainer = '<div class="col s2">'
       + ' <div class="row"> <button class="btn-floating green darken-4 vote"'
-      + ' id="like" data-song_id="' + _id + '">'
-      + ' <i class="material-icons thumb_up"> </i> </button> </div>'
+      + ' id="like" data-song_id="' + yid + '">'
+      + ' <i class="material-icons"> thumb_up </i> </button> </div>'
       + ' <div class="col s2"> <button class="btn-floating red darken-4 vote"'
-      + ' id="dislike" data-song_id="' + _id + '">'
-      + ' <i class="material-icons thumb_down"> </i> </button> </div> </div>'
+      + ' id="dislike" data-song_id="' + yid + '">'
+      + ' <i class="material-icons"> thumb_down </i> </button> </div> </div>'
     elm.append(ratecontainer);
   }
   else{
