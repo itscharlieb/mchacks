@@ -267,8 +267,8 @@ $( document ).ready(function() {
   // New element message
   // TODO add error logic if the item already exists
   socket.on("new_song", function(data) {
-    console.log(JSON.stringify(data));
-    console.log("socket received new song for[" + song_id + "]");
-    createListElement(data.name, data.yid, 0)
+    console.log("socket received new song for[" + data.yid + "]");
+    var song_elm = createListElement(data.name, data.yid, 0)
+    $('#songItems').append(song_elm);
   })
 });
