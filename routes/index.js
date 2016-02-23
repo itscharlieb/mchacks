@@ -329,6 +329,7 @@ module.exports = function(io){
           console.log(err);
         }
         else{
+          console.log(data);
           router.io.sockets.in(playlist_id).emit('new_song', data);
         }
       });

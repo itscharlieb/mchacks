@@ -188,20 +188,27 @@ function createListElement(name, yid, votes){
   return elm;
 }
 
+// -------------------- SEARCH FUNCTION -------------------- \\
 $( document ).ready(function() {
   $('#search').keypress(function (e) {
     if (e.which == 13) {
       var query = $(this).val();
       var api_key = "AIzaSyCmn8BkTbc1FOA6Z8yIBDDvsEf-e8Btfo0";
 
+      // Will most probably have to sanitize the inputs 
+      // Things like & in the query string will likely mess up results
       var queryString = "https://www.googleapis.com/youtube/v3/search?part=id%2Csnippet"
-      queryString += "&q=" + query + "&key=" + api_key;
+      // We only want results of type video, don't want playlists or channels
+      queryString += "&type=video";
+      queryString += "&q=" + query;
+      queryString += "&key=" + api_key;
       console.log(queryString);
 
       $.get( queryString, function( response ) {
         $('#searchResults').remove();
 
         var response = response.items;
+        console.log(response);
         populateListElements(response, true);
       });
 
@@ -260,6 +267,7 @@ $( document ).ready(function() {
   // New element message
   // TODO add error logic if the item already exists
   socket.on("new_song", function(data) {
+    console.log(JSON.stringify(data));
     console.log("socket received new song for[" + song_id + "]");
     createListElement(data.name, data.yid, 0)
   })
