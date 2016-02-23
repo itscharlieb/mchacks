@@ -40,15 +40,36 @@
 //        What we have now
 //    Hidden: Anyone with the link can access 
 //    Private: Need a key to access
+//    Members only: Only users can access
+//        Naturally, only members can vote (I believe)
+//        Could also constrain to only members being allowed to suggest
+//        Goes along with the notion of "groups"
 //
 // Video termination options (don't really know what to call this)
 //    Delete: When the video is watched it is "removed" from the playlist
 //        Use case: say I have a set of videos that I want to watch, 
 //          but haven't gotten around to watching yet.
 //          You could make a playlist that removes the videos when they have been watched
-//        Could also be used to keep playlists smaller
+//        Use case 2: Music blogs
+//          Typically I go on websites like freshnewtracks or thissongissick
+//          to get new music. We could use this as a similar avenue to find new songs.
+//          Say a user would like to find new music. They could visit a playlist
+//          by one of these blogs or similar blogger type people. 
+//          The only songs on the playlist will be those that are "new" to me.
+//          Could pay people to make good playlists based on a portion of our ad revenue.
+//            Pay is comeasurate with the number of views on the playlist
+//            This will be incentive to create good playlists...
+//        Use case 3: Could also be used to keep playlists smaller
+//        Would have to distinguish between the behaviours on active vs passive playlists
+//          Passive falls in line with the first two use cases
+//            We only want to delete the song if a specific user has viewed it
+//          Active would be for the last use case
+//            Deletes if the master has finished the video
 //    Reset votes: When the video is watched the votes are reset to 0
 //        What we have now
+//    Active deletion: Delete if the user downvotes
+//        This might be a better alternative for the "music blog" idea
+//        Keep songs on the playlist that I like
 //
 // Vote threshold: if a video goes below a certain number of downvotes, will be deleted
 //
