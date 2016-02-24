@@ -24,16 +24,9 @@ function onYouTubeIframeAPIReady() {
     }
   });
 
-// TODO error handling
-  player.addEventListener("onError", function(errorcode) {
-    // 2: request contains an invalid parameter value
-    // 100: the video was not found
-    // 101: the owner does not want video played in embedded players
-    // 150: same as a 101
-    console.log(errorcode);
-    if(errorcode == 100){
-    }
-  });
+  var handler = youtubeErrorHandler;
+  // TODO better error handling
+  player.addEventListener("onError", handler.fireErr);
 }
 
 // 4. The API will call this function when the video player is ready.
@@ -55,6 +48,29 @@ function stopVideo() {
   player.stopVideo();
 }
 
+// TODO test
+// Encapsulate the error handling so that we can delay it
+// This prevents multiple error messages from flooding in like crazy
+// I don't really know if the delay is necessary in all cases
+var youtubeErrorHandler = {
+  // 2: request contains an invalid parameter value
+  // 100: the video was not found
+  // 101: the owner does not want video played in embedded players
+  // 150: same as a 101
+  isReady: true,
+
+  fireErr: function(errorCode){
+    console.log(errorCode);
+    if(errorCode && this.isReady){
+      socket.emit('next_song');
+      this.isReady = false;
+    }
+    
+    setTimeout(function(){
+      this.isReady = true;
+    }, 200);
+  },
+};
 
 
 function populateListElements(data, isSearch){
