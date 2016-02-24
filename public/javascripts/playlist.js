@@ -1,5 +1,7 @@
 //TODO I really don't like how this loads... its all laggy and jumpy
 // probably can be fixed with better html stylings
+
+
 // 2. This code loads the IFrame Player API code asynchronously.
 var socket = io();
 var tag = document.createElement('script');
@@ -19,6 +21,17 @@ function onYouTubeIframeAPIReady() {
     events: {
       'onReady': onPlayerReady,
       'onStateChange': onPlayerStateChange
+    }
+  });
+
+// TODO error handling
+  player.addEventListener("onError", function(errorcode) {
+    // 2: request contains an invalid parameter value
+    // 100: the video was not found
+    // 101: the owner does not want video played in embedded players
+    // 150: same as a 101
+    console.log(errorcode);
+    if(errorcode == 100){
     }
   });
 }
@@ -41,6 +54,7 @@ function onPlayerStateChange(event) {
 function stopVideo() {
   player.stopVideo();
 }
+
 
 
 function populateListElements(data, isSearch){
@@ -119,6 +133,7 @@ function populateListElements(data, isSearch){
 function createListElement(name, yid, votes){
   // The list element
   var elm = $(document.createElement('li'));
+  elm.css({"cursor": "pointer"});
   elm.addClass('collection-item valign-wrapper');
     
   elm.attr('id', yid);
