@@ -8,12 +8,16 @@ block content
           div.input-field
             input(placeholder="Search for songs" id="search" type="search")
             i.material-icons.right#searchBtn search
-      div.scrollable#songList(style={"display":"none"})
-        ul.collection.z-depth-1#songItems
-          - if (typeof(playlist) !== 'undefined' && playlist.length > 1){
+      - if (typeof(playlist) !== 'undefined' && playlist.length > 1){
+        div.scrollable#songList
+          ul.collection.z-depth-1#songItems
             each song, index in playlist
               +song(song, index)
-          -}
+      -}
+      - else{
+        div.scrollable#songList(style={"display":"none"})
+          ul.collection.z-depth-1#songItems
+      -}
     div.col.s8
       div.center-align#player-container
         - if (typeof(playlist) !== 'undefined'){

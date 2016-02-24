@@ -205,7 +205,9 @@ function createListElement(name, yid, votes){
 new ResizeSensor($('#songList'), function() {
   songListResize();
 });
+// Doesn't appear to be working
 new ResizeSensor($('#searchBox'), function() {
+  console.log("hello");
   songListResize();
 });
 $(window).resize(function() {
@@ -216,11 +218,11 @@ var songListResize = function(){
     // dynamic height for the playlist list
     var minheight = 300;
     var bottombuffer = 20;
-    var dynheight = $(window).height() - $('#songlist').offset().top - bottombuffer;
+    var dynheight = $(window).height() - $('#songList').offset().top - bottombuffer;
 
     var height = (dynheight < minheight) ? minheight : dynheight;
     
-    $('#songlist').height(height);
+    $('#songList').height(height);
   }
 }
 
