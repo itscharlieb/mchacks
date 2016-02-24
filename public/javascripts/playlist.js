@@ -1,7 +1,6 @@
 //TODO I really don't like how this loads... its all laggy and jumpy
 // probably can be fixed with better html stylings
 
-
 // 2. This code loads the IFrame Player API code asynchronously.
 var socket = io();
 var tag = document.createElement('script');
@@ -200,8 +199,36 @@ function createListElement(name, yid, votes){
   return elm;
 }
 
-// -------------------- SEARCH FUNCTION -------------------- \\
+// -------------------- DYNAMIC SONGLIST SIZING -------------------- \\
+// I don't know if I like this... We might want to change this logic later
+// Seems wildly inefficient
+new ResizeSensor($('#songList'), function() {
+  songListResize();
+});
+new ResizeSensor($('#searchBox'), function() {
+  songListResize();
+});
+$(window).resize(function() {
+  songListResize();
+});
+var songListResize = function(){
+  if ($('#songList').css('display') != "none"){
+    // dynamic height for the playlist list
+    var minheight = 300;
+    var bottombuffer = 20;
+    var dynheight = $(window).height() - $('#songlist').offset().top - bottombuffer;
+
+    var height = (dynheight < minheight) ? minheight : dynheight;
+    
+    $('#songlist').height(height);
+  }
+}
+
+
 $( document ).ready(function() {
+  songListResize();
+
+// -------------------- SEARCH FUNCTION -------------------- \\
   // Delete results on search clear
   $('#search').keyup(function (e) {
     if ($(this).val() == ""){
@@ -222,6 +249,7 @@ $( document ).ready(function() {
     searchYoutube();
   });
 
+  // The function that actually searches the Youtube Data API
   function searchYoutube(){
     var query = $('#search').val();
     // TODO Do we really want to keep this here?
@@ -245,7 +273,6 @@ $( document ).ready(function() {
     });
   }
 
-
   $(document).on('click', '.vote', function(){
     // There might be a better way to store this information
     // Especially the playlist id... seems redundant
@@ -266,7 +293,7 @@ $( document ).ready(function() {
     }
   });
 
-  // ------- SOCKET STUFF ------- \\
+// -------------------- SOCKET STUFF -------------------- \\
   socket.on("init", function(song_id){
     console.log("socket received init for [" + song_id + "]");
     player.loadVideoById(song_id);
@@ -298,9 +325,17 @@ $( document ).ready(function() {
   // TODO add error logic if the item already exists
   socket.on("new_song", function(data) {
     console.log("socket received new song for[" + data.yid + "]");
-    // TODO consider adding a cool highlight fadeout
-    // so users can easily see what they have added
-    var song_elm = createListElement(data.name, data.yid, 0)
-    $('#songItems').append(song_elm);
+
+    if ($('#player').css('visibility') == 'hidden'){
+      $('#player').css('visibility', 'visible');
+      player.loadVideoById(data.yid);
+    }
+    else{
+      // TODO consider adding a cool highlight fadeout
+      // so users can easily see what they have added
+      var song_elm = createListElement(data.name, data.yid, 0)
+      $('#songList').css({"display":"block"});
+      $('#songItems').append(song_elm);
+    }
   })
 });
