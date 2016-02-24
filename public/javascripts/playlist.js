@@ -348,6 +348,24 @@ $( document ).ready(function() {
   // This is according to youtube ID, not name
   socket.on("existent_song", function(data) {
     console.log("socket existent next song for[" + data.yid + "]");
+    var songItem = $("#"+data.yid);
+    var songList = $('#songList');
+    var songListHeight = songList.height();
+    var songItemHeight = songItem.height();
+
+    var origColor = songItem.css("background");
+    var highlightColor = "#669966";
+    songItem.css("background", highlightColor);
+    // Calculate and scroll to the song in  the list smoothly
+    var scrollLocation = songList.scrollTop() - songList.offset().top 
+                          + songItem.offset().top - songListHeight / 2 
+                          + songItemHeight / 2;
+    $('#songList').animate({scrollTop : scrollLocation}, 1000, function(){
+      songItem.animate({backgroundColor: origColor, easing: "linear"}, 3000);
+    });
+
+    // Highlight the item for a few seconds, then fade out 
+    var highlightColor = "#6666FF";
   })
 
 });
