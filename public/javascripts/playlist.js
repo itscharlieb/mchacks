@@ -206,6 +206,8 @@ new ResizeSensor($('#songList'), function() {
   songListResize();
 });
 // Doesn't appear to be working
+// Wouldn't really make much of a difference since the min-height 300 
+// will force it off the page
 new ResizeSensor($('#searchBox'), function() {
   console.log("hello");
   songListResize();
@@ -340,4 +342,12 @@ $( document ).ready(function() {
       $('#songItems').append(song_elm);
     }
   })
+
+  // Existent song message
+  // Fires if the song a user tried to add was already in the playlist
+  // This is according to youtube ID, not name
+  socket.on("existent_song", function(data) {
+    console.log("socket existent next song for[" + data.yid + "]");
+  })
+
 });

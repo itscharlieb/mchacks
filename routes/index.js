@@ -318,19 +318,32 @@ module.exports = function(io){
       // This is invoked when a search element is clicked
       // TODO add checks to ensure that the youtube ids are unique
      
-      Playlist.findByIdAndUpdate(mongoose.Types.ObjectId(playlist_id),
-                                  {"$addToSet": {'items':
-                                                  {'id': data.yid,
-                                                   'name': data.name,
-                                                   'votes': 0}}
-                                  }, function(err,response){
-
+      Playlist.count({"_id": playlist_id, "items.id": data.yid}, function(err, count){
         if (err){
           console.log(err);
         }
         else{
-          console.log(data);
-          router.io.sockets.in(playlist_id).emit('new_song', data);
+          if (count > 0){
+            console.log("Item " + data.yid + "already exists in the db: ");
+            router.io.sockets.in(playlist_id).emit('existent_song', data);
+          }
+          else{
+            Playlist.findByIdAndUpdate(mongoose.Types.ObjectId(playlist_id),
+                                        {"$addToSet": {'items':
+                                                        {'id': data.yid,
+                                                         'name': data.name,
+                                                         'votes': 0}}
+                                        }, function(err2,response){
+              if (err2){
+                console.log(err2);
+              }
+              else{
+                console.log("New item " + data.yid + " added to database");
+                router.io.sockets.in(playlist_id).emit('new_song', data);
+              }
+            });
+
+          }
         }
       });
     });
