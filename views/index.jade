@@ -2,12 +2,29 @@ extends nav_layout
 
 block content
   div.container
+    - for (var i = 0; i < playlists.length; i+=3){
     div.row
-      ul.collection
-        each playlist in playlists
-          +playlist(playlist)
-    
+      div.card.col.s3.small.z-depth-2
+        +playlist(playlists[i])
+      - if (i+1 < playlists.length){
+      div.card.col.s3.offset-s1.small.z-depth-2
+        +playlist(playlists[i+1])
+      -}
+      - if (i+2 < playlists.length){
+      div.card.col.s3.offset-s1.small.z-depth-2
+        +playlist(playlists[i+2])
+      -}
+    -}
         
 mixin playlist(playlist)
-  li.collection-item
-    a(href="/playlist/" + playlist._id) #{playlist.name}
+    div.card-image
+      img.activator(src='http://freshnewtracks.com/wp-content/uploads/2011/10/FNTLOGO.jpg')
+    div.card-content
+      span.card-title.activator 
+        h5.center-align.grey-text.text-darken-2.valign #{playlist.name}
+      div.card-action
+        h6.right-align
+          i.material-icons.activator info
+    div.card-reveal
+      span.card-title.grey-text.text-darken-4 #{playlist.name} 
+      p.detaildesc Some detailed information about the playlist
