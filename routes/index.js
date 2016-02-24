@@ -92,6 +92,13 @@
 
 // TODO constructing your own playlist
 // Consider having the option to "add to playlist" for videos in other playlists
+//
+
+
+// I see the initial page as a sort of scrolling implementation you see on modern websites
+// Each "pane" will be a description of the different playlist types
+//    and several example playlists
+
 
 var express = require('express');
 var router = express.Router();
@@ -179,7 +186,8 @@ router.get('/', function(req, res, next) {
       res.status(500).send(err);
     }
     else{
-      res.render('index', { title: 'Index', playlists: response });
+      res.render('index', { title: 'Index', playlists: response, 
+        script: '/javascripts/index.js' });
     }
   });
 });
@@ -195,7 +203,7 @@ router.post('/playlist/create', function(req, res){
 
       // Set the playlist id, since it has changed
       playlist_id = response._id;
-      res.render('playlist', { });
+      res.render('playlist', {script: '/javascripts/playlist.js'});
     }
   });
 });
@@ -225,11 +233,11 @@ router.get('/playlist/:id', function(req, res, next) {
           if (err) console.log(err);
         });
       
-        res.render('playlist', { playlist:response });
+        res.render('playlist', { playlist:response, script: '/javascripts/playlist.js' });
       }
 
       // If no songs were found in the playlist then render with empty object
-      res.render('playlist', { });
+      res.render('playlist', { script: '/javascripts/playlist.js' });
     }
   });
 });
