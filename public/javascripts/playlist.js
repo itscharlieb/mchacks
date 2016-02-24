@@ -37,29 +37,6 @@ function onPlayerStateChange(event) {
     console.log("socket sending next song request");
     socket.emit('next_song');
   }
-  //if (event.data == YT.PlayerState.PLAYING && !done) {
-  //  setTimeout(stopVideo, 6000);
-  //  done = true;
-  //}
-  // if (event.data == 0){
-  //   $.ajax({
-  //     type: 'POST',
-  //     contentType: 'application/json',
-  //     url: '/playlist/next',
-  //     async: true,
-  //     statusCode: {
-  //       200: function(nextSong) {
-  //         console.log(nextSong);
-  //         player.loadVideoById(nextSong);
-  //       },
-  //       400: function(data) {
-  //         console.log(data);
-  //         alert("Didn't work");
-  //       }
-  //     }
-  //
-  //   });
-  // }
 }
 function stopVideo() {
   player.stopVideo();
@@ -173,6 +150,8 @@ function createListElement(name, yid, votes){
     elm.append(ratecontainer);
   }
   else{
+    // The functionality for Search elements
+    // Want to clear the search list and add the song to the playlist on click
     elm.click(function(){
       var data = {};
       data.yid = yid;
@@ -190,31 +169,49 @@ function createListElement(name, yid, votes){
 
 // -------------------- SEARCH FUNCTION -------------------- \\
 $( document ).ready(function() {
+  // Delete results on search clear
+  $('#search').keyup(function (e) {
+    if ($(this).val() == ""){
+      $("#searchResults").remove();
+    }
+  });
+
+  // Searching on enter
   $('#search').keypress(function (e) {
     if (e.which == 13) {
-      var query = $(this).val();
-      var api_key = "AIzaSyCmn8BkTbc1FOA6Z8yIBDDvsEf-e8Btfo0";
-
-      // Will most probably have to sanitize the inputs 
-      // Things like & in the query string will likely mess up results
-      var queryString = "https://www.googleapis.com/youtube/v3/search?part=id%2Csnippet"
-      // We only want results of type video, don't want playlists or channels
-      queryString += "&type=video";
-      queryString += "&q=" + query;
-      queryString += "&key=" + api_key;
-      console.log(queryString);
-
-      $.get( queryString, function( response ) {
-        $('#searchResults').remove();
-
-        var response = response.items;
-        console.log(response);
-        populateListElements(response, true);
-      });
-
+      searchYoutube();
       return false;
     }
   });
+
+  // Searching on button press
+  $('#searchBtn').on('click', function(){
+    searchYoutube();
+  });
+
+  function searchYoutube(){
+    var query = $('#search').val();
+    // TODO Do we really want to keep this here?
+    var api_key = "AIzaSyCmn8BkTbc1FOA6Z8yIBDDvsEf-e8Btfo0";
+
+    // Will most probably have to sanitize the inputs 
+    // Things like & in the query string will likely mess up results
+    var queryString = "https://www.googleapis.com/youtube/v3/search?part=id%2Csnippet"
+    // We only want results of type video, don't want playlists or channels
+    queryString += "&type=video";
+    queryString += "&q=" + query;
+    queryString += "&key=" + api_key;
+    console.log(queryString);
+
+    $.get( queryString, function( response ) {
+      $('#searchResults').remove();
+
+      var response = response.items;
+      console.log(response);
+      populateListElements(response, true);
+    });
+  }
+
 
   $('.vote').on('click', function(){
     // There might be a better way to store this information
@@ -268,6 +265,8 @@ $( document ).ready(function() {
   // TODO add error logic if the item already exists
   socket.on("new_song", function(data) {
     console.log("socket received new song for[" + data.yid + "]");
+    // TODO consider adding a cool highlight fadeout
+    // so users can easily see what they have added
     var song_elm = createListElement(data.name, data.yid, 0)
     $('#songItems').append(song_elm);
   })
