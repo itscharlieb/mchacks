@@ -149,7 +149,6 @@ function populateListElements(data, isSearch){
 function createListElement(name, yid, votes){
   // The list element
   var elm = $(document.createElement('li'));
-  elm.css({"cursor": "pointer"});
   elm.addClass('collection-item valign-wrapper');
     
   elm.attr('id', yid);
@@ -181,6 +180,9 @@ function createListElement(name, yid, votes){
     elm.append(ratecontainer);
   }
   else{
+    
+    elm.css({"cursor": "pointer"});
+    
     // The functionality for Search elements
     // Want to clear the search list and add the song to the playlist on click
     elm.click(function(){
@@ -244,7 +246,7 @@ $( document ).ready(function() {
   }
 
 
-  $('.vote').on('click', function(){
+  $(document).on('click', '.vote', function(){
     // There might be a better way to store this information
     // Especially the playlist id... seems redundant
     var data = {};

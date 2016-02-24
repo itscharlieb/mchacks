@@ -30,9 +30,9 @@ mixin song(song, index)
         img#thumbnail.responsive-img(src=thumbnailUrl)
       div.col.s4
         p#songName= song.name
-      div.col.s4.removeSearch
+      div.col.s4
         p#vote_val= song.votes
-      div.col.s2.removeSearch
+      div.col.s2
         div.row
           button.btn-floating.green.darken-4.vote(id="like" data-song_id=song.id)
             i.material-icons thumb_up
