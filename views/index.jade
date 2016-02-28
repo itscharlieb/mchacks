@@ -21,10 +21,9 @@ mixin playlist(playlist)
       img.activator(src='http://freshnewtracks.com/wp-content/uploads/2011/10/FNTLOGO.jpg')
     div.card-content
       span.card-title.activator 
-        h5.center-align.grey-text.text-darken-2.valign #{playlist.name}
-      div.card-action
-        h6.right-align
-          i.material-icons.activator info
+        a.center-align.grey-text.text-darken-2.valign(href="/playlist/" + playlist._id) #{playlist.name}
+      div.card-action.right-align(style={"height":"10px"})
+        i.material-icons.activator(style={"margin-top":"-10px", "cursor":"pointer"}) info
     div.card-reveal
       span.card-title.grey-text.text-darken-4 #{playlist.name} 
       p.detaildesc Some detailed information about the playlist

@@ -123,6 +123,7 @@ var Schema = mongoose.Schema;
 // Consider putting in a "last_played"
 var PlaylistSchema = new Schema({
     name: String,
+    img: String,                                    // The image for the playlist
     // creator: mongoose.Schema.Types.ObjectId,     // Not needed for now
     items: [{
       id: String,                                   // Unique id in system used
