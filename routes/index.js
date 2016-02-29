@@ -2,6 +2,7 @@
 //    Should create users
 //    Then fix the voting issues
 //    Fix the scrollable bars, they look kindof bad in my UI
+//    Put playlist in a session?
 
 
 // TODO Later: Adding configuration options to a playlist
@@ -105,6 +106,8 @@ var router = express.Router();
 var mongoose = require('mongoose');
 
 
+
+
 mongoose.connect('mongodb://localhost/McHacks', function (error) {
   if (error) {
       console.log(error);
@@ -113,9 +116,19 @@ mongoose.connect('mongodb://localhost/McHacks', function (error) {
     console.log('Successfully Connected');
   }
 });
-
 var conn = mongoose.connection
 var Schema = mongoose.Schema;
+
+
+var MongoStore = require('connect-mongo')(express);
+app.use(cookieParser());
+app.use(expressSession({
+  store: new MongoStore({
+    mongooseConnection: conn
+  }),
+  secret:'seacrets<3wisburrs'
+}));
+
 
 
 // TODO perhaps change to playlist_name, song_name, and song_id
