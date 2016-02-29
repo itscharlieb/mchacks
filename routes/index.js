@@ -134,8 +134,15 @@ var PlaylistSchema = new Schema({
     }]
 });
 
+var UserSchema = new Schema({
+    userName: String,
+    password: String,
+    email: String,
+});
 
 var Playlist = mongoose.model('playlist', PlaylistSchema);
+var Users = mongoose.model('users', UserSchema);
+
 
 // Temporary database seeder
 Playlist.find().count(function(err, count){
