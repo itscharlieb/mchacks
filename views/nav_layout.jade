@@ -18,38 +18,38 @@ block header
 
   div.modal#create-playlist
     div.modal-content
-      form(name="create", action="/playlist/create", method="post")
-        div.container
+      form(name="createPlaylist", action="/playlist/create", method="post")
+        div.container.createPlaylist
           div.row.valign-wrapper
             div.input-field.col.s10
-              input(placeholder="CREATE A PLAYLIST" id="name" name="playlist_name" class="validate")
+              input(placeholder="CREATE A PLAYLIST" id="name" name="playlist_name")
             div.col.s2
-              button.btn(type="submit") Create
+              button.btn(type="submit" id="createPlaylistBtn" disabled="true") Create
             
   div.modal#create-account
     div.modal-content
-      form(name="create", action="/user/create", method="post")
-        div.container
+      form(name="createUser", action="/user/create", method="post")
+        div.container.createUser
           div.row.valign-wrapper
             div.input-field.col.s12
-              input(placeholder="UserName" id="user_name" name="user_name" class="validate")
+              input(placeholder="UserName" id="user_name" name="user_name")
           div.row.valign-wrapper
             div.input-field.col.s10
-              input(type="password" placeholder="Password" id="password" name="password" class="validate")
+              input(type="password" placeholder="Password" id="password" name="password")
             div.input-field.col.s10
-              input(type="password" placeholder="Re-enter Password" id="validate" name="validate" class="validate")
+              input(type="password" placeholder="Re-enter Password" id="validate" name="validate")
             div.col.s2
-              button.btn(type="submit") Create
+              button.btn(type="submit" id="createUserBtn" disabled="true") Create
 
   div.modal#login
     div.modal-content
-      form(name="create", action="/user/login", method="post")
-        div.container
+      form(name="login", action="/user/login", method="post")
+        div.container.login
           div.row.valign-wrapper
             div.input-field.col.s12
-              input(placeholder="UserName" id="user_name" name="user_name" class="validate")
+              input(placeholder="UserName" id="user_name" name="user_name")
           div.row.valign-wrapper
             div.input-field.col.s10
-              input(type="password" placeholder="Password" id="password" name="password" class="validate")
+              input(type="password" placeholder="Password" id="password" name="password")
             div.col.s2
-              button.btn(type="submit") Create
+              button.btn(type="submit") Login
