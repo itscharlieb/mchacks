@@ -119,7 +119,7 @@ mongoose.connect('mongodb://localhost/McHacks', function (error) {
 var conn = mongoose.connection
 var Schema = mongoose.Schema;
 
-
+/*
 var MongoStore = require('connect-mongo')(express);
 app.use(cookieParser());
 app.use(expressSession({
@@ -128,7 +128,7 @@ app.use(expressSession({
   }),
   secret:'seacrets<3wisburrs'
 }));
-
+*/
 
 
 // TODO perhaps change to playlist_name, song_name, and song_id
@@ -211,6 +211,17 @@ router.get('/', function(req, res, next) {
         script: '/javascripts/index.js' });
     }
   });
+});
+
+router.post('/user/create', function(req, res){
+  console.log("Create User");
+  console.log(JSON.stringify(req.body));
+  res.redirect('/');
+});
+router.post('/user/login', function(req, res){
+  console.log("Login User");
+  console.log(JSON.stringify(req.body));
+  res.redirect('/');
 });
 
 // This probably does not need sockets, but do we want them?
