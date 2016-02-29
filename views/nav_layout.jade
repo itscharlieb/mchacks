@@ -8,20 +8,48 @@ block header
         ul.right
           - if (session && session.username){
           li
-            a.btn.modal-trigger(data-target="create-modal") Create a new playlist
+            a.btn.modal-trigger(data-target="create-playlist") Create a new playlist
           -}
           - else{
           li
-            a.btn.modal-trigger(data-target="create-modal") Create Account
-            a.btn.modal-trigger(data-target="create-modal") Login
+            a.btn.modal-trigger(data-target="create-account") Create Account
+            a.btn.modal-trigger(data-target="login") Login
           -}
-            
-  div.modal#create-modal
+
+  div.modal#create-playlist
     div.modal-content
       form(name="create", action="/playlist/create", method="post")
         div.container
           div.row.valign-wrapper
             div.input-field.col.s10
               input(placeholder="CREATE A PLAYLIST" id="name" name="playlist_name" class="validate")
+            div.col.s2
+              button.btn(type="submit") Create
+            
+  div.modal#create-account
+    div.modal-content
+      form(name="create", action="/user/create", method="post")
+        div.container
+          div.row.valign-wrapper
+            div.input-field.col.s12
+              input(placeholder="UserName" id="user_name" name="user_name" class="validate")
+          div.row.valign-wrapper
+            div.input-field.col.s10
+              input(type="password" placeholder="Password" id="password" name="password" class="validate")
+            div.input-field.col.s10
+              input(type="password" placeholder="Re-enter Password" id="validate" name="validate" class="validate")
+            div.col.s2
+              button.btn(type="submit") Create
+
+  div.modal#login
+    div.modal-content
+      form(name="create", action="/user/login", method="post")
+        div.container
+          div.row.valign-wrapper
+            div.input-field.col.s12
+              input(placeholder="UserName" id="user_name" name="user_name" class="validate")
+          div.row.valign-wrapper
+            div.input-field.col.s10
+              input(type="password" placeholder="Password" id="password" name="password" class="validate")
             div.col.s2
               button.btn(type="submit") Create
