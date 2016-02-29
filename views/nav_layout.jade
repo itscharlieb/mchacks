@@ -6,8 +6,15 @@ block header
       div.nav-wrapper
         a.brand-logo.center(href="/") THUMP
         ul.right
+          - if (session && session.username){
           li
             a.btn.modal-trigger(data-target="create-modal") Create a new playlist
+          -}
+          - else{
+          li
+            a.btn.modal-trigger(data-target="create-modal") Create Account
+            a.btn.modal-trigger(data-target="create-modal") Login
+          -}
             
   div.modal#create-modal
     div.modal-content
