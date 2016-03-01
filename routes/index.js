@@ -104,7 +104,10 @@
 var express = require('express');
 var router = express.Router();
 var mongoose = require('mongoose');
-
+var bcrypt = require('bcrypt');
+var cookieParser = require('cookie-parser');
+var expressSession = require('express-session');
+var bodyParser = require('body-parser');
 
 
 
@@ -119,6 +122,10 @@ mongoose.connect('mongodb://localhost/McHacks', function (error) {
 var conn = mongoose.connection
 var Schema = mongoose.Schema;
 
+// Not so sure what this line does exactly...
+router.use(cookieParser());
+router.use(expressSession({secret:'seacrets<3wisburrs'}));
+router.use(bodyParser());
 /*
 var MongoStore = require('connect-mongo')(express);
 app.use(cookieParser());
@@ -216,7 +223,27 @@ router.get('/', function(req, res, next) {
 router.post('/user/create', function(req, res){
   console.log("Create User");
   console.log(JSON.stringify(req.body));
-  res.redirect('/');
+  console.log(JSON.stringify(req.session));
+  bcrypt.genSalt(10, function(err, salt) {
+    bcrypt.hash(req.body.password, salt, function(err, hash) {
+      if (err){
+        console.log(err);
+        res.status(500).send(err);
+      }
+      new Users({
+        userName: req.body.userName,
+        password: hash,
+      }).save(function(err,saved){
+        if (err){
+          console.log(err);
+          res.status(500).send(err);
+        }
+        req.session.userId = saved._id;
+        req.session.userName = saved.userName;
+        res.redirect("/");
+      });
+    });
+  });
 });
 router.post('/user/login', function(req, res){
   console.log("Login User");

@@ -5,7 +5,7 @@ $(document).ready(function(){
     if (parentDiv.hasClass('createUser')){
       var pass = $('#password');
       var passCheck = $('#validate');
-      var userName = $('#user_name');
+      var userName = $('#userName');
       if (pass.val() == passCheck.val() 
           && pass.val().length >= 5 && passCheck.val().length >= 5
           && userName.val().length >= 5){
